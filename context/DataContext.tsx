@@ -33,6 +33,7 @@ export const EstudiantesProvider: React.FC<{ children: ReactNode }> = ({ childre
         setError(null);
         try {
             const data = await api.obtenerEstudiantes();
+            console.log('DataContext - Estudiantes cargados en estado:', data.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
             setEstudiantes(data);
         } catch (err) {
             setError("No se pudieron cargar los estudiantes.");
