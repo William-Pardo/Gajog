@@ -85,6 +85,9 @@ export const useGestionTienda = () => {
 
     console.log('useGestionTienda - Retornando estudiantes:', estudiantes.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
 
+    // Crear copia del array para evitar problemas de referencia
+    const estudiantesCopia = estudiantes.map(est => ({ ...est }));
+
     return {
         // Datos y estado de carga
         implementos,
@@ -92,7 +95,7 @@ export const useGestionTienda = () => {
         cargando,
         error,
         cargarDatosTienda,
-        estudiantes,
+        estudiantes: estudiantesCopia,
         cargandoEstudiantes,
 
         // Estado y manejadores de UI
