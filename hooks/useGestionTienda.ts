@@ -83,6 +83,8 @@ export const useGestionTienda = () => {
         }
     };
 
+    console.log('useGestionTienda - Retornando estudiantes:', estudiantes.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
+
     return {
         // Datos y estado de carga
         implementos,

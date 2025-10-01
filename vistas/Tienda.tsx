@@ -106,7 +106,10 @@ const VistaTienda: React.FC = () => {
 
       {renderContent()}
       {modalAbierto && compraSeleccionada && (
-        <ModalSeleccionarEstudiante abierto={modalAbierto} titulo={`Asignar Compra a Estudiante`} textoBotonConfirmar="Confirmar Compra" onCerrar={() => setModalAbierto(false)} onConfirmar={procesarCompra} cargandoConfirmacion={cargandoCompra} estudiantes={estudiantes} cargandoEstudiantes={cargandoEstudiantes} />
+        (() => {
+          console.log('VistaTienda - Pasando estudiantes al modal:', estudiantes.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
+          return <ModalSeleccionarEstudiante abierto={modalAbierto} titulo={`Asignar Compra a Estudiante`} textoBotonConfirmar="Confirmar Compra" onCerrar={() => setModalAbierto(false)} onConfirmar={procesarCompra} cargandoConfirmacion={cargandoCompra} estudiantes={estudiantes} cargandoEstudiantes={cargandoEstudiantes} />;
+        })()
       )}
       {modalCompartirAbierto && <ModalCompartirTienda abierto={modalCompartirAbierto} onCerrar={() => setModalCompartirAbierto(false)} />}
     </div>
