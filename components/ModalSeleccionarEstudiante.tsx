@@ -94,8 +94,8 @@ const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBot
               {(() => {
                 console.log('Modal - Estudiantes originales:', estudiantes.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
                 console.log('Modal - Estudiantes filtrados:', estudiantesFiltrados.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
-                return estudiantesFiltrados.map(estudiante => (
-                  <li key={estudiante.id}>
+                return estudiantesFiltrados.map((estudiante, index) => (
+                  <li key={`${estudiante.id}-${index}`}>
                     <button
                       onClick={() => {
                         console.log('Objeto estudiante completo:', estudiante);
