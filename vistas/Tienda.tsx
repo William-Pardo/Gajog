@@ -19,6 +19,8 @@ const VistaTienda: React.FC = () => {
     cargando,
     error,
     cargarDatosTienda,
+    estudiantes,
+    cargandoEstudiantes,
     selecciones,
     handleSeleccionChange,
     modalAbierto,
@@ -104,7 +106,7 @@ const VistaTienda: React.FC = () => {
 
       {renderContent()}
       {modalAbierto && compraSeleccionada && (
-        <ModalSeleccionarEstudiante abierto={modalAbierto} titulo={`Asignar Compra a Estudiante`} textoBotonConfirmar="Confirmar Compra" onCerrar={() => setModalAbierto(false)} onConfirmar={procesarCompra} cargandoConfirmacion={cargandoCompra} />
+        <ModalSeleccionarEstudiante abierto={modalAbierto} titulo={`Asignar Compra a Estudiante`} textoBotonConfirmar="Confirmar Compra" onCerrar={() => setModalAbierto(false)} onConfirmar={procesarCompra} cargandoConfirmacion={cargandoCompra} estudiantes={estudiantes} cargandoEstudiantes={cargandoEstudiantes} />
       )}
       {modalCompartirAbierto && <ModalCompartirTienda abierto={modalCompartirAbierto} onCerrar={() => setModalCompartirAbierto(false)} />}
     </div>

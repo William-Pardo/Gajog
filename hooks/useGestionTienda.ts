@@ -9,7 +9,7 @@ import { useTienda, useEstudiantes } from '../context/DataContext';
 
 export const useGestionTienda = () => {
     const { implementos, cargando, error, registrarCompra, cargarDatosTienda } = useTienda();
-    const { cargarEstudiantes } = useEstudiantes();
+    const { estudiantes, cargando: cargandoEstudiantes, cargarEstudiantes } = useEstudiantes();
     const { mostrarNotificacion } = useNotificacion();
 
     // Estado local de UI
@@ -90,6 +90,8 @@ export const useGestionTienda = () => {
         cargando,
         error,
         cargarDatosTienda,
+        estudiantes,
+        cargandoEstudiantes,
 
         // Estado y manejadores de UI
         selecciones,

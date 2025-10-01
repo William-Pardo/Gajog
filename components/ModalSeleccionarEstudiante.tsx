@@ -14,13 +14,13 @@ interface Props {
   onCerrar: () => void;
   onConfirmar: (estudiante: Estudiante) => void;
   cargandoConfirmacion: boolean;
+  estudiantes: Estudiante[];
+  cargandoEstudiantes: boolean;
 }
 
-const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBotonConfirmar, onCerrar, onConfirmar, cargandoConfirmacion }) => {
-  const [estudiantes, setEstudiantes] = useState<Estudiante[]>([]);
+const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBotonConfirmar, onCerrar, onConfirmar, cargandoConfirmacion, estudiantes, cargandoEstudiantes }) => {
   const [estudianteSeleccionado, setEstudianteSeleccionado] = useState<Estudiante | null>(null);
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
-  const [cargando, setCargando] = useState(false);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -37,19 +37,11 @@ const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBot
 
   useEffect(() => {
     if (abierto) {
-      setCargando(true);
-      obtenerEstudiantes()
-        .then(estudiantes => {
-          console.log('Estudiantes cargados:', estudiantes.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
-          setEstudiantes(estudiantes);
-        })
-        .catch(err => console.error("Error al cargar estudiantes", err))
-        .finally(() => setCargando(false));
-
+      console.log('Modal abierto - Estudiantes recibidos:', estudiantes.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
       setEstudianteSeleccionado(null);
       setTerminoBusqueda('');
     }
-  }, [abierto]);
+  }, [abierto, estudiantes]);
 
   const estudiantesFiltrados = useMemo(() => {
     if (!terminoBusqueda) return estudiantes;
@@ -87,7 +79,7 @@ const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBot
             value={terminoBusqueda}
             onChange={e => setTerminoBusqueda(e.target.value)}
           />
-          {cargando ? (
+          {cargandoEstudiantes ? (
             <p className="dark:text-gray-300">Cargando estudiantes...</p>
           ) : (
             <ul className="space-y-2 max-h-64 overflow-y-auto">
