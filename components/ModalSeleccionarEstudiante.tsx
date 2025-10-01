@@ -84,28 +84,30 @@ const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBot
           ) : (
             <ul className="space-y-2 max-h-64 overflow-y-auto">
               {(() => {
-                console.log('Modal - Renderizando estudiantes filtrados:', estudiantesFiltrados.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
+                console.log('Modal - Estudiantes originales:', estudiantes.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
+                console.log('Modal - Estudiantes filtrados:', estudiantesFiltrados.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
                 return estudiantesFiltrados.map(estudiante => (
-                <li key={estudiante.id}>
-                  <button
-                    onClick={() => {
-                      console.log('Objeto estudiante completo:', estudiante);
-                      console.log('Seleccionando estudiante:', estudiante.id, estudiante.nombres);
-                      setEstudianteSeleccionado(estudiante);
-                      console.log('Estado después de selección:', estudianteSeleccionado);
-                    }}
-                    className={`w-full text-left p-3 rounded-md flex items-center space-x-3 transition-colors duration-200 ${estudianteSeleccionado?.id === estudiante.id ? 'bg-tkd-blue text-white shadow-md' : 'hover:bg-tkd-gray dark:hover:bg-gray-700'}`}
-                  >
-                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${estudianteSeleccionado?.id === estudiante.id ? 'bg-white border-white' : 'border-gray-400'}`}>
-                      {estudianteSeleccionado?.id === estudiante.id && (
-                        <div className="w-2 h-2 bg-tkd-blue rounded-full"></div>
-                      )}
-                    </div>
-                    <IconoUsuario className="w-5 h-5"/>
-                    <span className="dark:text-white">{`${estudiante.nombres} ${estudiante.apellidos}`}</span>
-                  </button>
-                </li>
-              ))}
+                  <li key={estudiante.id}>
+                    <button
+                      onClick={() => {
+                        console.log('Objeto estudiante completo:', estudiante);
+                        console.log('Seleccionando estudiante:', estudiante.id, estudiante.nombres);
+                        setEstudianteSeleccionado(estudiante);
+                        console.log('Estado después de selección:', estudianteSeleccionado);
+                      }}
+                      className={`w-full text-left p-3 rounded-md flex items-center space-x-3 transition-colors duration-200 ${estudianteSeleccionado?.id === estudiante.id ? 'bg-tkd-blue text-white shadow-md' : 'hover:bg-tkd-gray dark:hover:bg-gray-700'}`}
+                    >
+                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${estudianteSeleccionado?.id === estudiante.id ? 'bg-white border-white' : 'border-gray-400'}`}>
+                        {estudianteSeleccionado?.id === estudiante.id && (
+                          <div className="w-2 h-2 bg-tkd-blue rounded-full"></div>
+                        )}
+                      </div>
+                      <IconoUsuario className="w-5 h-5"/>
+                      <span className="dark:text-white">{`${estudiante.nombres} ${estudiante.apellidos}`}</span>
+                    </button>
+                  </li>
+                ));
+              })()}
             </ul>
           )}
         </div>
