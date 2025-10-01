@@ -95,8 +95,10 @@ const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBot
                 <li key={estudiante.id}>
                   <button
                     onClick={() => {
+                      console.log('Objeto estudiante completo:', estudiante);
                       console.log('Seleccionando estudiante:', estudiante.id, estudiante.nombres);
                       setEstudianteSeleccionado(estudiante);
+                      console.log('Estado después de selección:', estudianteSeleccionado);
                     }}
                     className={`w-full text-left p-3 rounded-md flex items-center space-x-3 transition-colors duration-200 ${estudianteSeleccionado?.id === estudiante.id ? 'bg-tkd-blue text-white shadow-md' : 'hover:bg-tkd-gray dark:hover:bg-gray-700'}`}
                   >
