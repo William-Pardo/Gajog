@@ -36,7 +36,13 @@ export const obtenerEstudiantes = async (): Promise<Estudiante[]> => {
         return [];
     }
     const snapshot = await getDocs(estudiantesCollection);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Estudiante));
+    const estudiantes = snapshot.docs.map(doc => {
+        const estudiante = { id: doc.id, ...doc.data() } as Estudiante;
+        console.log(`Estudiante mapeado - ID: ${doc.id}, Nombres: ${estudiante.nombres} ${estudiante.apellidos}`);
+        return estudiante;
+    });
+    console.log(`Total estudiantes obtenidos: ${estudiantes.length}`);
+    return estudiantes;
 };
 
 export const obtenerEstudiantePorId = async (idEstudiante: string): Promise<Estudiante> => {
