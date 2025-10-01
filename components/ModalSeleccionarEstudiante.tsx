@@ -83,7 +83,9 @@ const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBot
             <p className="dark:text-gray-300">Cargando estudiantes...</p>
           ) : (
             <ul className="space-y-2 max-h-64 overflow-y-auto">
-              {estudiantesFiltrados.map(estudiante => (
+              {(() => {
+                console.log('Modal - Renderizando estudiantes filtrados:', estudiantesFiltrados.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
+                return estudiantesFiltrados.map(estudiante => (
                 <li key={estudiante.id}>
                   <button
                     onClick={() => {
