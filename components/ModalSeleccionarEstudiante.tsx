@@ -92,6 +92,7 @@ const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBot
                       onClick={() => {
                         console.log('Objeto estudiante completo:', estudiante);
                         console.log('Seleccionando estudiante:', estudiante.id, estudiante.nombres);
+                        console.log('Estudiante en array estudiantes:', estudiantes.find(e => e.nombres === estudiante.nombres));
                         setEstudianteSeleccionado(estudiante);
                         console.log('Estado después de selección:', estudianteSeleccionado);
                       }}
