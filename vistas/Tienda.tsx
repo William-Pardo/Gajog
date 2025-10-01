@@ -54,7 +54,7 @@ const VistaTienda: React.FC = () => {
           const variacionSeleccionada = implemento.variaciones.find(v => v.id === selecciones[implemento.id]);
           return (
             <div key={implemento.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden flex flex-col transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-2">
-              <img src={implemento.imagenUrl} alt={implemento.nombre} className="w-full h-48 object-cover" />
+              <img src={implemento.imagenUrl} alt={implemento.nombre} className="w-full h-48 object-contain p-5" />
               <div className="p-4 flex flex-col flex-grow">
                 <h2 className="text-xl font-bold text-tkd-dark dark:text-white">{implemento.nombre}</h2>
                 <p className="text-gray-600 dark:text-gray-300 mt-1 flex-grow mb-4">{implemento.descripcion}</p>
