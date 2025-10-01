@@ -39,10 +39,13 @@ const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBot
     if (abierto) {
       setCargando(true);
       obtenerEstudiantes()
-        .then(setEstudiantes)
+        .then(estudiantes => {
+          console.log('Estudiantes cargados:', estudiantes.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
+          setEstudiantes(estudiantes);
+        })
         .catch(err => console.error("Error al cargar estudiantes", err))
         .finally(() => setCargando(false));
-      
+
       setEstudianteSeleccionado(null);
       setTerminoBusqueda('');
     }
