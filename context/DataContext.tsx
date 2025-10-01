@@ -69,7 +69,11 @@ export const EstudiantesProvider: React.FC<{ children: ReactNode }> = ({ childre
         </EstudiantesContext.Provider>
     );
 };
-export const useEstudiantes = () => useContext(EstudiantesContext)!;
+export const useEstudiantes = () => {
+    const context = useContext(EstudiantesContext)!;
+    console.log('useEstudiantes - Retornando estudiantes del contexto:', context.estudiantes.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
+    return context;
+};
 
 // --- Eventos Context ---
 interface EventosContextType {
