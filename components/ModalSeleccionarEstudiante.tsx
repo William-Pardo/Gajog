@@ -57,7 +57,10 @@ const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBot
   
   const manejarConfirmacion = () => {
     if (estudianteSeleccionado) {
+      console.log('Confirmando estudiante seleccionado:', estudianteSeleccionado.id, estudianteSeleccionado.nombres);
       onConfirmar(estudianteSeleccionado);
+    } else {
+      console.log('No hay estudiante seleccionado');
     }
   };
 
@@ -89,12 +92,8 @@ const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBot
                 <li key={estudiante.id}>
                   <button
                     onClick={() => {
-                      // Asegurar que solo un estudiante esté seleccionado
-                      if (estudianteSeleccionado?.id === estudiante.id) {
-                        setEstudianteSeleccionado(null); // Deseleccionar si ya está seleccionado
-                      } else {
-                        setEstudianteSeleccionado(estudiante); // Seleccionar este estudiante
-                      }
+                      console.log('Seleccionando estudiante:', estudiante.id, estudiante.nombres);
+                      setEstudianteSeleccionado(estudiante);
                     }}
                     className={`w-full text-left p-3 rounded-md flex items-center space-x-3 transition-colors duration-200 ${estudianteSeleccionado?.id === estudiante.id ? 'bg-tkd-blue text-white shadow-md' : 'hover:bg-tkd-gray dark:hover:bg-gray-700'}`}
                   >
