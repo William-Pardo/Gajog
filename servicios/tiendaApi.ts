@@ -26,7 +26,7 @@ export const obtenerImplementos = async (): Promise<Implemento[]> => {
                 id: 'imp-001',
                 nombre: 'Dobok (Uniforme) Nacional',
                 descripcion: 'Uniforme oficial para la práctica de Taekwondo. Ligero y resistente, ideal para entrenamiento y competencia.',
-                imagenUrl: '/imagenes/uniforme-nacional.png',
+                imagenUrl: '/imagenes/dobok-nacional.png',
                 categoria: CategoriaImplemento.Uniformes,
                 variaciones: [
                     { id: 'v-001-1', descripcion: 'Talla 0 (120 cm)', precio: 120000 },
@@ -126,7 +126,7 @@ export const obtenerImplementos = async (): Promise<Implemento[]> => {
                 id: 'imp-009',
                 nombre: 'Copa Femenina (Protector inguinal)',
                 descripcion: 'Protector inguinal para mujeres, de uso obligatorio en combate.',
-                imagenUrl: '/imagenes/copa-mujer.png',
+                imagenUrl: '/imagenes/copa-femenina.png',
                 categoria: CategoriaImplemento.Accesorios,
                 variaciones: [
                     { id: 'v-009-1', descripcion: 'Talla S', precio: 40000 },
@@ -137,7 +137,7 @@ export const obtenerImplementos = async (): Promise<Implemento[]> => {
                 id: 'imp-010',
                 nombre: 'Dobok (Uniforme) Importado',
                 descripcion: 'Uniforme de alta gama para competencia, con tecnología de ventilación y tejido ultraligero.',
-                imagenUrl: '/imagenes/uniforme-importado.png',
+                imagenUrl: '/imagenes/dobok-importado.png',
                 categoria: CategoriaImplemento.Uniformes,
                 variaciones: [
                     { id: 'v-010-1', descripcion: 'Talla 2 (140 cm)', precio: 250000 },
