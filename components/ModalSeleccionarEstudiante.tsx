@@ -44,10 +44,17 @@ const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBot
   }, [abierto, estudiantes]);
 
   const estudiantesFiltrados = useMemo(() => {
-    if (!terminoBusqueda) return estudiantes;
-    return estudiantes.filter(e =>
+    console.log('useMemo - Filtrando estudiantes, terminoBusqueda:', terminoBusqueda);
+    console.log('useMemo - Array estudiantes recibido:', estudiantes.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
+    if (!terminoBusqueda) {
+      console.log('useMemo - Retornando estudiantes sin filtrar');
+      return estudiantes;
+    }
+    const filtrados = estudiantes.filter(e =>
       `${e.nombres} ${e.apellidos}`.toLowerCase().includes(terminoBusqueda.toLowerCase())
     );
+    console.log('useMemo - Retornando estudiantes filtrados:', filtrados.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
+    return filtrados;
   }, [estudiantes, terminoBusqueda]);
   
   const manejarConfirmacion = () => {
