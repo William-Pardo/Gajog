@@ -33,20 +33,29 @@ const procesarImagenEvento = async (imagenUrl: string | undefined, eventoId: str
         return '';
     }
 
-    // Si la imagen ya es una URL (no data URL), devolverla tal cual
-    if (imagenUrl.startsWith('http')) {
+    // Si la imagen ya es una URL de Firebase Storage, devolverla tal cual (no subir de nuevo)
+    if (imagenUrl.startsWith('https://firebasestorage.googleapis.com')) {
         return imagenUrl;
     }
 
-    // Si es una data URL, intentar subir a Storage
+    // Si es una data URL, intentar subir a Storage con timeout para evitar demoras
     if (imagenUrl.startsWith('data:image')) {
         try {
-            const storageRef = ref(storage, `eventos/${eventoId}/imagen_${Date.now()}`);
-            const snapshot = await uploadString(storageRef, imagenUrl, 'data_url');
-            return await getDownloadURL(snapshot.ref);
+            // Crear promesa con timeout de 5 segundos para evitar esperas largas
+            const uploadPromise = (async () => {
+                const storageRef = ref(storage, `eventos/${eventoId}/imagen_${Date.now()}`);
+                const snapshot = await uploadString(storageRef, imagenUrl, 'data_url');
+                return await getDownloadURL(snapshot.ref);
+            })();
+
+            const timeoutPromise = new Promise<string>((_, reject) =>
+                setTimeout(() => reject(new Error('Upload timeout')), 5000)
+            );
+
+            return await Promise.race([uploadPromise, timeoutPromise]);
         } catch (error) {
-            console.error("Error al subir imagen del evento:", error);
-            // Si falla la subida, devolver la data URL original para que el evento se guarde
+            console.warn("Error al subir imagen del evento, usando data URL original:", error instanceof Error ? error.message : String(error));
+            // Si falla la subida, devolver la data URL original para que el evento se guarde rápido
             return imagenUrl;
         }
     }
