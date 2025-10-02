@@ -63,45 +63,17 @@ const BarraLateral: React.FC<{ estaAbierta: boolean; onCerrar: () => void; onLog
                 {estaAbierta ? <IconoLogoOficialConTexto className="w-auto h-12 text-white"/> : <IconoLogoOficial className="w-10 h-10" />}
             </div>
             <nav className="flex-grow mt-4" onClick={onCerrar}>
-                {enlaces.filter(enlace => usuario.rol === RolUsuario.Admin || enlace.rol === RolUsuario.Usuario).map((enlace) => {
-                    // Para rutas problemáticas, usar navegación por hash
-                    const rutasProblematicas = ['/', '/estudiantes', '/eventos', '/notificaciones', '/configuracion'];
-                    const esRutaProblematica = rutasProblematicas.includes(enlace.ruta);
-
-                    if (esRutaProblematica) {
-                        return (
-                            <button
-                                key={enlace.ruta}
-                                onClick={() => {
-                                    // Cambiar hash para controlar tabs en VistaTienda
-                                    window.location.hash = enlace.ruta;
-                                    // Forzar recarga si es necesario
-                                    if (enlace.ruta !== '/tienda') {
-                                        window.location.reload();
-                                    }
-                                }}
-                                className={`flex items-center px-6 py-4 my-1 text-sm transition-all duration-200 ease-in-out hover:bg-tkd-red hover:text-white ${location.pathname === enlace.ruta ? 'bg-tkd-red text-white' : 'text-tkd-gray'} ${estaAbierta ? '' : 'justify-center'} w-full text-left`}
-                                title={!estaAbierta ? enlace.texto : undefined}
-                            >
-                                <enlace.icono className="w-6 h-6" />
-                                {estaAbierta && <span className="mx-4 font-medium">{enlace.texto}</span>}
-                            </button>
-                        );
-                    }
-
-                    // Para rutas que funcionan bien, usar React Router normal
-                    return (
-                        <ReactRouterDOM.Link
-                            key={enlace.ruta}
-                            to={enlace.ruta}
-                            className={`flex items-center px-6 py-4 my-1 text-sm transition-all duration-200 ease-in-out hover:bg-tkd-red hover:text-white ${location.pathname === enlace.ruta ? 'bg-tkd-red text-white' : 'text-tkd-gray'} ${estaAbierta ? '' : 'justify-center'}`}
-                            title={!estaAbierta ? enlace.texto : undefined}
-                        >
-                            <enlace.icono className="w-6 h-6" />
-                            {estaAbierta && <span className="mx-4 font-medium">{enlace.texto}</span>}
-                        </ReactRouterDOM.Link>
-                    );
-                })}
+                {enlaces.filter(enlace => usuario.rol === RolUsuario.Admin || enlace.rol === RolUsuario.Usuario).map((enlace) => (
+                    <ReactRouterDOM.Link
+                        key={enlace.ruta}
+                        to={enlace.ruta}
+                        className={`flex items-center px-6 py-4 my-1 text-sm transition-all duration-200 ease-in-out hover:bg-tkd-red hover:text-white ${location.pathname === enlace.ruta ? 'bg-tkd-red text-white' : 'text-tkd-gray'} ${estaAbierta ? '' : 'justify-center'}`}
+                        title={!estaAbierta ? enlace.texto : undefined}
+                    >
+                        <enlace.icono className="w-6 h-6" />
+                        {estaAbierta && <span className="mx-4 font-medium">{enlace.texto}</span>}
+                    </ReactRouterDOM.Link>
+                ))}
             </nav>
             <div className="p-4 border-t border-gray-700">
                 <button onClick={onLogout} className={`flex items-center w-full px-4 py-2 text-sm text-tkd-gray hover:bg-tkd-red rounded-md transition-colors duration-200 ${!estaAbierta ? 'justify-center' : ''}`}>

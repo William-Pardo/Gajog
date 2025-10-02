@@ -1,5 +1,6 @@
 // vistas/Tienda.tsx - Interfaz Unificada
 import React, { useState, useEffect } from 'react';
+import * as ReactRouterDOM from 'react-router-dom';
 import { useGestionTienda } from '../hooks/useGestionTienda';
 import { useDashboard } from '../hooks/useDashboard';
 import { useGestionEstudiantes } from '../hooks/useGestionEstudiantes';
@@ -35,10 +36,13 @@ import EmptyState from '../components/EmptyState';
 const VistaTienda: React.FC = () => {
   console.log('DEBUG: VistaTienda rendering');
 
-  // Detectar tab desde la URL
+  // Usar React Router para detectar la ruta actual
+  const location = ReactRouterDOM.useLocation();
+
+  // Detectar tab desde la ruta actual
   const getTabFromPath = (path: string): 'tienda' | 'dashboard' | 'estudiantes' | 'eventos' | 'notificaciones' | 'configuracion' => {
     console.log('DEBUG: getTabFromPath - path:', path);
-    if (path === '/' || path === '/dashboard' || path === '') return 'dashboard';
+    if (path === '/' || path === '/dashboard') return 'dashboard';
     if (path === '/estudiantes') return 'estudiantes';
     if (path === '/tienda') return 'tienda';
     if (path === '/eventos') return 'eventos';
@@ -48,20 +52,8 @@ const VistaTienda: React.FC = () => {
     return 'tienda'; // default
   };
 
-  // Obtener tab actual desde hash
-  const getCurrentTab = () => {
-    const currentPath = window.location.hash.replace('#', '') || '/';
-    return getTabFromPath(currentPath);
-  };
-
-  const [activeTab, setActiveTab] = useState<'tienda' | 'dashboard' | 'estudiantes' | 'eventos' | 'notificaciones' | 'configuracion'>(getCurrentTab());
-
-  // Verificar hash en cada render y actualizar si es necesario
-  const currentTabFromHash = getCurrentTab();
-  if (currentTabFromHash !== activeTab) {
-    console.log('DEBUG: Tab mismatch - hash says:', currentTabFromHash, 'but state is:', activeTab, '- updating');
-    setActiveTab(currentTabFromHash);
-  }
+  // El tab activo se determina desde la ruta actual
+  const activeTab = getTabFromPath(location.pathname);
 
   // Hooks para todas las funcionalidades
   const tiendaData = useGestionTienda();
