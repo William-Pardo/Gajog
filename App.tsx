@@ -20,7 +20,7 @@ import Login from './vistas/Login';
 import VistaConfiguracion from './vistas/Configuracion';
 import VistaDashboard from './vistas/Dashboard';
 import { VistaEstudiantes } from './vistas/Estudiantes';
-import { VistaEventoPublico, VistaEventos } from './vistas/Eventos';
+import { VistaEventPublico, VistaEvents } from './vistas/Events';
 import VistaFirmaConsentimiento from './vistas/FirmaConsentimiento';
 import VistaFirmaContrato from './vistas/FirmaContrato';
 import VistaFirmaImagen from './vistas/FirmaImagen';
@@ -49,7 +49,7 @@ const BarraLateral: React.FC<{ estaAbierta: boolean; onCerrar: () => void; onLog
         { ruta: "/", texto: "Dashboard", icono: IconoDashboard, rol: RolUsuario.Usuario },
         { ruta: "/estudiantes", texto: "Estudiantes", icono: IconoEstudiantes, rol: RolUsuario.Usuario },
         { ruta: "/tienda", texto: "Tienda", icono: IconoTienda, rol: RolUsuario.Usuario },
-        { ruta: "/eventos", texto: "Eventos", icono: IconoEventos, rol: RolUsuario.Usuario },
+        { ruta: "/events", texto: "Eventos", icono: IconoEventos, rol: RolUsuario.Usuario },
         { ruta: "/notificaciones", texto: "Alertas", icono: IconoCampana, rol: RolUsuario.Usuario },
         { ruta: "/configuracion", texto: "Configuración", icono: IconoConfiguracion, rol: RolUsuario.Usuario },
     ];
@@ -221,14 +221,14 @@ const AppRoutes: React.FC = () => {
             <ReactRouterDOM.Route path="/firma/:idEstudiante" element={<VistaFirmaConsentimiento />} />
             <ReactRouterDOM.Route path="/contrato/:idEstudiante" element={<VistaFirmaContrato />} />
             <ReactRouterDOM.Route path="/imagen/:idEstudiante" element={<VistaFirmaImagen />} />
-            <ReactRouterDOM.Route path="/evento/:idEvento" element={<VistaEventoPublico />} />
+            <ReactRouterDOM.Route path="/evento/:idEvento" element={<VistaEventPublico />} />
             <ReactRouterDOM.Route path="/tienda-publica" element={<VistaTiendaPublica />} />
 
             <ReactRouterDOM.Route element={<RutaProtegida><AppLayoutWithData /></RutaProtegida>}>
                 <ReactRouterDOM.Route path="/" element={<VistaDashboard />} />
                 <ReactRouterDOM.Route path="/estudiantes" element={<VistaEstudiantes />} />
                 <ReactRouterDOM.Route path="/tienda" element={<VistaTienda />} />
-                <ReactRouterDOM.Route path="/eventos" element={<VistaEventos />} />
+                <ReactRouterDOM.Route path="/events" element={<VistaEvents />} />
                 <ReactRouterDOM.Route path="/notificaciones" element={<VistaNotificaciones />} />
                 <ReactRouterDOM.Route path="/configuracion" element={<VistaConfiguracion />} />
             </ReactRouterDOM.Route>
