@@ -86,9 +86,21 @@ export const useGestionNotificaciones = () => {
             const tipo = estudiante.estadoPago === EstadoPago.Pendiente ? TipoNotificacion.RecordatorioPago : TipoNotificacion.AvisoVencimiento;
             
             try {
-                const mensaje = await generarMensajePersonalizado(tipo, estudiante, { monto: estudiante.saldoDeudor });
+                let mensaje: string;
+                try {
+                    mensaje = await generarMensajePersonalizado(tipo, estudiante, { monto: estudiante.saldoDeudor });
+                } catch (geminiError) {
+                    // Fallback message when Gemini API fails
+                    console.warn(`Error generando mensaje personalizado para ${estudiante.nombres}, usando mensaje genérico:`, geminiError);
+                    if (tipo === TipoNotificacion.RecordatorioPago) {
+                        mensaje = `Recordatorio de pago pendiente. El saldo pendiente es de $${estudiante.saldoDeudor}. Por favor, regularice su situación.`;
+                    } else {
+                        mensaje = `Aviso de vencimiento. Tiene un saldo vencido de $${estudiante.saldoDeudor}. Por favor, contacte con la administración.`;
+                    }
+                }
+
                 await api.enviarNotificacion(canal, destinatario, mensaje);
-                
+
                 await api.guardarNotificacionEnHistorial({
                     fecha: new Date().toISOString(),
                     estudianteId: estudiante.id,

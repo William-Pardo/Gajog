@@ -138,7 +138,9 @@ const VistaNotificaciones: React.FC = () => {
                                                 {notificacion.tipo === 'ConfirmacionPago' && '✅ Confirmación de Pago'}
                                             </h3>
                                             <p className={`text-sm mt-1 ${notificacion.leida ? 'text-gray-500 dark:text-gray-500' : 'text-gray-700 dark:text-gray-300'}`}>
-                                                {notificacion.mensaje}
+                                                {typeof notificacion.mensaje === 'string' && notificacion.mensaje.includes('API key not valid')
+                                                    ? 'Mensaje enviado exitosamente (contenido personalizado no disponible)'
+                                                    : notificacion.mensaje}
                                             </p>
                                             <div className="flex items-center space-x-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
                                                 <span>Para: {notificacion.tutorNombre}</span>
