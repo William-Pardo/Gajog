@@ -131,7 +131,11 @@ const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBot
                         setEstudianteSeleccionado(estudiante);
                         console.log('Estado después de selección:', estudianteSeleccionado);
                       }}
-                      className={`w-full text-left p-3 rounded-md flex items-center space-x-3 transition-colors duration-200 ${estudianteSeleccionado?.id === estudiante.id ? 'bg-tkd-blue text-white shadow-md' : 'hover:bg-tkd-gray dark:hover:bg-gray-700'}`}
+                      className={`w-full text-left p-3 rounded-md flex items-center space-x-3 transition-colors duration-200 ${(() => {
+                        const isSelected = estudianteSeleccionado?.id === estudiante.id;
+                        console.log(`Estudiante ${estudiante.nombres} - ID: ${estudiante.id}, Seleccionado ID: ${estudianteSeleccionado?.id}, isSelected: ${isSelected}`);
+                        return isSelected ? 'bg-tkd-blue text-white shadow-md' : 'hover:bg-tkd-gray dark:hover:bg-gray-700';
+                      })()}`}
                     >
                       <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${estudianteSeleccionado?.id === estudiante.id ? 'bg-white border-white' : 'border-gray-400'}`}>
                         {estudianteSeleccionado?.id === estudiante.id && (
