@@ -1,30 +1,84 @@
-// vistas/Dashboard.tsx - Versión Simplificada
+// vistas/Dashboard.tsx
 import React from 'react';
+import { useDashboard } from '../hooks/useDashboard';
+
+// Componentes
+import SolicitudesCompraPendientes from '../components/dashboard/SolicitudesCompraPendientes';
+import FiltrosDashboard from '../components/dashboard/FiltrosDashboard';
+import ResumenKPIs from '../components/dashboard/ResumenKPIs';
+import ProximosEventos from '../components/dashboard/ProximosEventos';
+import ResumenPagos from '../components/dashboard/ResumenPagos';
+import AccesosDirectos from '../components/dashboard/AccesosDirectos';
+import Loader from '../components/Loader';
+import ErrorState from '../components/ErrorState';
 
 const VistaDashboard: React.FC = () => {
+    const {
+        cargando,
+        error,
+        solicitudesCompra,
+        filtros,
+        filtrosActivos,
+        datosFiltrados,
+        cargandoAccion,
+        recargarTodo,
+        manejarGestionCompra,
+        handleFiltroChange,
+        limpiarFiltros,
+    } = useDashboard();
+
+    if (cargando) {
+        return (
+            <div className="flex justify-center items-center h-full p-8">
+                <Loader texto="Cargando dashboard..." />
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="p-8">
+                  <ErrorState mensaje={error} onReintentar={recargarTodo} />
+            </div>
+        );
+    }
+
     return (
-        <div className="p-8">
-            <h1 className="text-3xl font-bold text-tkd-dark dark:text-white mb-6">
+        <div className="p-4 sm:p-8 space-y-8">
+            <h1 className="text-3xl font-bold text-tkd-dark dark:text-white">
                 Dashboard
+                {filtrosActivos && (
+                    <span className="text-xl text-tkd-red ml-0 sm:ml-3 mt-1 sm:mt-0 block sm:inline relative group cursor-help">
+                        (Filtros Aplicados)
+                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
+                            Los datos que se muestran (KPIs, eventos, etc.) están siendo filtrados por las opciones seleccionadas.
+                        </span>
+                    </span>
+                )}
             </h1>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
-                <h2 className="text-xl font-semibold mb-4">Panel de Control</h2>
-                <p className="text-gray-600 dark:text-gray-300">
-                    Bienvenido al sistema de gestión Taekwondo Ga Jog.
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                    <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                        <h3 className="font-semibold text-blue-800 dark:text-blue-200">Estudiantes</h3>
-                        <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">4</p>
-                    </div>
-                    <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-                        <h3 className="font-semibold text-green-800 dark:text-green-200">Eventos</h3>
-                        <p className="text-2xl font-bold text-green-600 dark:text-green-400">2</p>
-                    </div>
-                    <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-                        <h3 className="font-semibold text-purple-800 dark:text-purple-200">Productos</h3>
-                        <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">15</p>
-                    </div>
+
+            <SolicitudesCompraPendientes
+                solicitudes={solicitudesCompra}
+                onGestionar={manejarGestionCompra}
+                cargandoAccion={cargandoAccion}
+            />
+
+            <FiltrosDashboard
+                filtros={filtros}
+                onFiltroChange={handleFiltroChange}
+                onLimpiarFiltros={limpiarFiltros}
+            />
+
+            <ResumenKPIs estudiantes={datosFiltrados.estudiantesFiltrados} />
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2">
+                    <ProximosEventos eventos={datosFiltrados.eventosParaMostrar} />
+                </div>
+
+                <div className="space-y-8">
+                    <ResumenPagos estudiantes={datosFiltrados.estudiantesFiltrados} />
+                    <AccesosDirectos />
                 </div>
             </div>
         </div>
