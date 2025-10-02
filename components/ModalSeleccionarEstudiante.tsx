@@ -7,6 +7,30 @@ import type { Estudiante } from '../tipos';
 import { obtenerEstudiantes } from '../servicios/api';
 import { IconoCerrar, IconoUsuario } from './Iconos';
 
+// Hook personalizado para obtener estudiantes directamente de la API
+const useEstudiantesDirectos = () => {
+  const [estudiantes, setEstudiantes] = useState<Estudiante[]>([]);
+  const [cargando, setCargando] = useState(true);
+
+  useEffect(() => {
+    const cargarEstudiantes = async () => {
+      try {
+        const data = await obtenerEstudiantes();
+        console.log('useEstudiantesDirectos - Estudiantes obtenidos de API (IDs):', data.map(e => e.id));
+        setEstudiantes(data);
+      } catch (error) {
+        console.error('Error cargando estudiantes:', error);
+      } finally {
+        setCargando(false);
+      }
+    };
+
+    cargarEstudiantes();
+  }, []);
+
+  return { estudiantes, cargando };
+};
+
 interface Props {
   abierto: boolean;
   titulo: string;
@@ -18,13 +42,13 @@ interface Props {
   cargandoEstudiantes: boolean;
 }
 
-const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBotonConfirmar, onCerrar, onConfirmar, cargandoConfirmacion, estudiantes, cargandoEstudiantes }) => {
+const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBotonConfirmar, onCerrar, onConfirmar, cargandoConfirmacion, estudiantes: estudiantesProps, cargandoEstudiantes: cargandoEstudiantesProps }) => {
   const [estudianteSeleccionado, setEstudianteSeleccionado] = useState<Estudiante | null>(null);
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
   const [visible, setVisible] = useState(false);
 
-  // Crear copia del array para evitar problemas de referencia
-  const estudiantesCopia = estudiantes.map(est => ({ ...est }));
+  // Usar hook personalizado para obtener estudiantes directamente de la API
+  const { estudiantes, cargando: cargandoEstudiantes } = useEstudiantesDirectos();
 
   useEffect(() => {
     if (abierto) {
@@ -48,18 +72,18 @@ const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBot
 
   const estudiantesFiltrados = useMemo(() => {
     console.log('useMemo - Filtrando estudiantes, terminoBusqueda:', terminoBusqueda);
-    console.log('useMemo - Array estudiantesCopia recibido (IDs):', estudiantesCopia.map(e => e.id));
-    console.log('useMemo - Array estudiantesCopia recibido (detalles):', estudiantesCopia.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
+    console.log('useMemo - Array estudiantes recibido (IDs):', estudiantes.map(e => e.id));
+    console.log('useMemo - Array estudiantes recibido (detalles):', estudiantes.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
     if (!terminoBusqueda) {
-      console.log('useMemo - Retornando estudiantes sin filtrar (IDs):', estudiantesCopia.map(e => e.id));
-      return estudiantesCopia;
+      console.log('useMemo - Retornando estudiantes sin filtrar (IDs):', estudiantes.map(e => e.id));
+      return estudiantes;
     }
-    const filtrados = estudiantesCopia.filter(e =>
+    const filtrados = estudiantes.filter(e =>
       `${e.nombres} ${e.apellidos}`.toLowerCase().includes(terminoBusqueda.toLowerCase())
     );
     console.log('useMemo - Retornando estudiantes filtrados (IDs):', filtrados.map(e => e.id));
     return filtrados;
-  }, [estudiantesCopia, terminoBusqueda]);
+  }, [estudiantes, terminoBusqueda]);
   
   const manejarConfirmacion = () => {
     if (estudianteSeleccionado) {
