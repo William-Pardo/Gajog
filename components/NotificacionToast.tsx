@@ -3,7 +3,12 @@
 
 import React from 'react';
 import { useNotificacion } from '../context/NotificacionContext';
-import { IconoCerrar, IconoAprobar, IconoRechazar, IconoInformacion, IconoAlertaTriangulo } from './Iconos';
+import { IconoCerrar } from './Iconos';
+
+// Iconos específicos para los toasts para no sobrecargar el archivo principal de Iconos
+const IconoExito: React.FC = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>;
+const IconoError: React.FC = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>;
+const IconoInfo: React.FC = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="16" y2="12"></line><line x1="12" x2="12.01" y1="8" y2="8"></line></svg>;
 
 
 const NotificacionToast: React.FC = () => {
@@ -16,25 +21,25 @@ const NotificacionToast: React.FC = () => {
       bg: 'bg-green-50 dark:bg-green-900/50',
       border: 'border-green-400 dark:border-green-600',
       iconColor: 'text-green-500',
-      Icon: IconoAprobar,
+      Icon: IconoExito,
     },
     error: {
       bg: 'bg-red-50 dark:bg-red-900/50',
       border: 'border-red-400 dark:border-red-600',
       iconColor: 'text-red-500',
-      Icon: IconoRechazar,
+      Icon: IconoError,
     },
     info: {
       bg: 'bg-blue-50 dark:bg-blue-900/50',
       border: 'border-blue-400 dark:border-blue-600',
       iconColor: 'text-blue-500',
-      Icon: IconoInformacion,
+      Icon: IconoInfo,
     },
     warning: {
       bg: 'bg-yellow-50 dark:bg-yellow-900/50',
       border: 'border-yellow-400 dark:border-yellow-600',
       iconColor: 'text-yellow-500',
-      Icon: IconoAlertaTriangulo,
+      Icon: IconoError,
     },
   };
 
