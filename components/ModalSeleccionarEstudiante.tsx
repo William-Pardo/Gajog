@@ -23,6 +23,9 @@ const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBot
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
   const [visible, setVisible] = useState(false);
 
+  // Crear copia del array para evitar problemas de referencia
+  const estudiantesCopia = estudiantes.map(est => ({ ...est }));
+
   useEffect(() => {
     if (abierto) {
       const timer = setTimeout(() => setVisible(true), 10);
@@ -45,18 +48,18 @@ const ModalSeleccionarEstudiante: React.FC<Props> = ({ abierto, titulo, textoBot
 
   const estudiantesFiltrados = useMemo(() => {
     console.log('useMemo - Filtrando estudiantes, terminoBusqueda:', terminoBusqueda);
-    console.log('useMemo - Array estudiantes recibido (IDs):', estudiantes.map(e => e.id));
-    console.log('useMemo - Array estudiantes recibido (detalles):', estudiantes.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
+    console.log('useMemo - Array estudiantesCopia recibido (IDs):', estudiantesCopia.map(e => e.id));
+    console.log('useMemo - Array estudiantesCopia recibido (detalles):', estudiantesCopia.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
     if (!terminoBusqueda) {
-      console.log('useMemo - Retornando estudiantes sin filtrar (IDs):', estudiantes.map(e => e.id));
-      return estudiantes;
+      console.log('useMemo - Retornando estudiantes sin filtrar (IDs):', estudiantesCopia.map(e => e.id));
+      return estudiantesCopia;
     }
-    const filtrados = estudiantes.filter(e =>
+    const filtrados = estudiantesCopia.filter(e =>
       `${e.nombres} ${e.apellidos}`.toLowerCase().includes(terminoBusqueda.toLowerCase())
     );
     console.log('useMemo - Retornando estudiantes filtrados (IDs):', filtrados.map(e => e.id));
     return filtrados;
-  }, [estudiantes, terminoBusqueda]);
+  }, [estudiantesCopia, terminoBusqueda]);
   
   const manejarConfirmacion = () => {
     if (estudianteSeleccionado) {
