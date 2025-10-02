@@ -126,9 +126,24 @@ export const VistaEncuentros: React.FC = () => {
     <div className="p-8">
       <div className="flex flex-wrap gap-4 justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-tkd-dark dark:text-white">Encuentros</h1>
-        <div className="text-sm text-red-500 font-bold bg-yellow-100 p-2 rounded">
+        <div className="text-sm text-red-500 font-bold bg-yellow-100 p-4 rounded border-2 border-red-300">
           🔧 DEBUG: Admin: {esAdmin ? 'Sí' : 'No'} | Usuario: {usuarioAuth ? JSON.stringify({ id: usuarioAuth.id, rol: usuarioAuth.rol, nombre: usuarioAuth.nombreUsuario }) : 'null'}
-          <br/>⚠️ SOLUCIÓN: {!esAdmin && <button onClick={cambiarRolAdmin} className="mt-2 bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600">CAMBIAR A ADMIN</button>}
+          <br/>
+          {!esAdmin && (
+            <div className="mt-3">
+              <button
+                onClick={() => {
+                  console.log('Botón clicked, calling cambiarRolAdmin');
+                  cambiarRolAdmin();
+                }}
+                className="bg-red-600 text-white px-4 py-2 rounded font-bold text-sm hover:bg-red-700 border-2 border-red-800"
+              >
+                🚀 CAMBIAR A ADMIN
+              </button>
+              <p className="text-xs mt-1 text-red-700">Haz clic aquí para habilitar la edición de eventos</p>
+            </div>
+          )}
+          {esAdmin && <p className="text-green-600 font-bold mt-2">✅ ¡Ya eres Admin! Los botones de edición deberían estar visibles.</p>}
         </div>
         <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
