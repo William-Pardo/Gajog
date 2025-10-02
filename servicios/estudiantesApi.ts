@@ -40,7 +40,10 @@ export const obtenerEstudiantes = async (): Promise<Estudiante[]> => {
     const snapshot = await getDocs(estudiantesCollection);
     console.log(`obtenerEstudiantes - Snapshot obtenido con ${snapshot.docs.length} documentos`);
     const estudiantes = snapshot.docs.map(doc => {
-        const estudiante = { id: doc.id, ...doc.data() } as Estudiante;
+        const data = doc.data();
+        // Eliminar el campo id de los datos si existe para evitar sobrescribir el ID real del documento
+        delete data.id;
+        const estudiante = { id: doc.id, ...data } as Estudiante;
         console.log(`Estudiante mapeado - ID: ${doc.id}, Nombres: ${estudiante.nombres} ${estudiante.apellidos}, ID final: ${estudiante.id}`);
         return estudiante;
     });
