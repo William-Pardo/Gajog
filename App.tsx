@@ -49,7 +49,7 @@ const BarraLateral: React.FC<{ estaAbierta: boolean; onCerrar: () => void; onLog
         { ruta: "/", texto: "Dashboard", icono: IconoDashboard, rol: RolUsuario.Usuario },
         { ruta: "/estudiantes", texto: "Estudiantes", icono: IconoEstudiantes, rol: RolUsuario.Usuario },
         { ruta: "/tienda", texto: "Tienda", icono: IconoTienda, rol: RolUsuario.Usuario },
-        { ruta: "/events", texto: "Eventos", icono: IconoEventos, rol: RolUsuario.Usuario },
+        // { ruta: "/events", texto: "Eventos", icono: IconoEventos, rol: RolUsuario.Usuario }, // DESHABILITADO TEMPORALMENTE
         { ruta: "/notificaciones", texto: "Alertas", icono: IconoCampana, rol: RolUsuario.Usuario },
         { ruta: "/configuracion", texto: "Configuración", icono: IconoConfiguracion, rol: RolUsuario.Usuario },
     ];
@@ -228,7 +228,7 @@ const AppRoutes: React.FC = () => {
                 <ReactRouterDOM.Route path="/" element={<VistaDashboard />} />
                 <ReactRouterDOM.Route path="/estudiantes" element={<VistaEstudiantes />} />
                 <ReactRouterDOM.Route path="/tienda" element={<VistaTienda />} />
-                <ReactRouterDOM.Route path="/events" element={<VistaEvents />} />
+                {/* <ReactRouterDOM.Route path="/events" element={<VistaEvents />} /> */} {/* DESHABILITADO TEMPORALMENTE */}
                 <ReactRouterDOM.Route path="/notificaciones" element={<VistaNotificaciones />} />
                 <ReactRouterDOM.Route path="/configuracion" element={<VistaConfiguracion />} />
             </ReactRouterDOM.Route>
