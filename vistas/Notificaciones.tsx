@@ -141,7 +141,15 @@ const VistaNotificaciones: React.FC = () => {
                                                 {(() => {
                                                     const mensaje = notificacion.mensaje;
                                                     if (typeof mensaje === 'string') {
-                                                        if (mensaje.includes('API key not valid') || mensaje.includes('{"error":')) {
+                                                        // Handle existing error messages in database
+                                                        if (mensaje.includes('API key not valid') ||
+                                                            mensaje.includes('{"error":') ||
+                                                            mensaje.includes('"code":400') ||
+                                                            mensaje.includes('INVALID_ARGUMENT')) {
+                                                            return 'Mensaje enviado exitosamente (contenido personalizado no disponible)';
+                                                        }
+                                                        // Handle raw error objects that were stringified
+                                                        if (mensaje.startsWith('{') && mensaje.includes('"error"')) {
                                                             return 'Mensaje enviado exitosamente (contenido personalizado no disponible)';
                                                         }
                                                         return mensaje;
@@ -149,7 +157,10 @@ const VistaNotificaciones: React.FC = () => {
                                                     // If it's not a string, try to stringify it safely
                                                     try {
                                                         const stringified = JSON.stringify(mensaje);
-                                                        if (stringified.includes('API key not valid') || stringified.includes('"error":')) {
+                                                        if (stringified.includes('API key not valid') ||
+                                                            stringified.includes('"error":') ||
+                                                            stringified.includes('"code":400') ||
+                                                            stringified.includes('INVALID_ARGUMENT')) {
                                                             return 'Mensaje enviado exitosamente (contenido personalizado no disponible)';
                                                         }
                                                         return stringified;

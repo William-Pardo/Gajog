@@ -108,6 +108,7 @@ export const VistaEncuentros: React.FC = () => {
     <div className="p-8">
       <div className="flex flex-wrap gap-4 justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-tkd-dark dark:text-white">Encuentros</h1>
+        <div className="text-sm text-gray-500">Admin: {esAdmin ? 'Sí' : 'No'}</div>
         <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
                 <label htmlFor="mostrar-futuros" className="text-sm font-medium text-gray-700 dark:text-gray-300">Mostrar solo futuros</label>
