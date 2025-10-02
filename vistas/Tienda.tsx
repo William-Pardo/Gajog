@@ -34,7 +34,20 @@ import EmptyState from '../components/EmptyState';
 
 const VistaTienda: React.FC = () => {
   console.log('DEBUG: VistaTienda rendering');
-  const [activeTab, setActiveTab] = useState<'tienda' | 'dashboard' | 'estudiantes' | 'eventos' | 'notificaciones' | 'configuracion'>('tienda');
+
+  // Detectar tab desde la URL
+  const currentPath = window.location.hash.replace('#', '') || '/';
+  const getTabFromPath = (path: string): 'tienda' | 'dashboard' | 'estudiantes' | 'eventos' | 'notificaciones' | 'configuracion' => {
+    if (path === '/' || path === '/dashboard') return 'dashboard';
+    if (path === '/estudiantes') return 'estudiantes';
+    if (path === '/tienda') return 'tienda';
+    if (path === '/eventos') return 'eventos';
+    if (path === '/notificaciones') return 'notificaciones';
+    if (path === '/configuracion') return 'configuracion';
+    return 'tienda'; // default
+  };
+
+  const [activeTab, setActiveTab] = useState<'tienda' | 'dashboard' | 'estudiantes' | 'eventos' | 'notificaciones' | 'configuracion'>(getTabFromPath(currentPath));
 
   // Hooks para todas las funcionalidades
   const tiendaData = useGestionTienda();
