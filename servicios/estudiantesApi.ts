@@ -31,17 +31,20 @@ const uploadFirma = async (idEstudiante: string, firmaBase64: string, tipo: 'con
 };
 
 export const obtenerEstudiantes = async (): Promise<Estudiante[]> => {
+    console.log(`obtenerEstudiantes - isFirebaseConfigured: ${isFirebaseConfigured}`);
     if (!isFirebaseConfigured) {
         console.warn("MODO SIMULADO: Devolviendo lista de estudiantes vacía.");
         return [];
     }
+    console.log("obtenerEstudiantes - Ejecutando consulta a Firestore...");
     const snapshot = await getDocs(estudiantesCollection);
+    console.log(`obtenerEstudiantes - Snapshot obtenido con ${snapshot.docs.length} documentos`);
     const estudiantes = snapshot.docs.map(doc => {
         const estudiante = { id: doc.id, ...doc.data() } as Estudiante;
-        console.log(`Estudiante mapeado - ID: ${doc.id}, Nombres: ${estudiante.nombres} ${estudiante.apellidos}`);
+        console.log(`Estudiante mapeado - ID: ${doc.id}, Nombres: ${estudiante.nombres} ${estudiante.apellidos}, ID final: ${estudiante.id}`);
         return estudiante;
     });
-    console.log(`Total estudiantes obtenidos: ${estudiantes.length}`);
+    console.log(`Total estudiantes obtenidos: ${estudiantes.length}, IDs finales:`, estudiantes.map(e => e.id));
     return estudiantes;
 };
 
