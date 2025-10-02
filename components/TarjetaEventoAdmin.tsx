@@ -109,7 +109,7 @@ const TarjetaEventoAdmin: React.FC<Props> = ({ evento, esAdmin, onCompartir, onG
                       <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-tkd-red text-white text-xs font-bold">{evento.solicitudesPendientes}</span>
                     ) : null}
                   </button>
-                  <button onClick={() => onEditar(evento)} className="p-2 bg-gray-200 dark:bg-gray-700 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 ease-in-out transform hover:scale-110" title="Editar Evento">
+                  <button onClick={() => { console.log('DEBUG: Edit button clicked for evento:', evento); onEditar(evento); }} className="p-2 bg-gray-200 dark:bg-gray-700 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 ease-in-out transform hover:scale-110" title="Editar Evento">
                     <IconoEditar className="w-5 h-5 text-tkd-blue dark:text-blue-400" />
                   </button>
                   <button onClick={() => onEliminar(evento)} className="p-2 bg-gray-200 dark:bg-gray-700 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 ease-in-out transform hover:scale-110" title="Eliminar Evento">

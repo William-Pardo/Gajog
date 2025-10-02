@@ -138,9 +138,25 @@ const VistaNotificaciones: React.FC = () => {
                                                 {notificacion.tipo === 'ConfirmacionPago' && '✅ Confirmación de Pago'}
                                             </h3>
                                             <p className={`text-sm mt-1 ${notificacion.leida ? 'text-gray-500 dark:text-gray-500' : 'text-gray-700 dark:text-gray-300'}`}>
-                                                {typeof notificacion.mensaje === 'string' && notificacion.mensaje.includes('API key not valid')
-                                                    ? 'Mensaje enviado exitosamente (contenido personalizado no disponible)'
-                                                    : notificacion.mensaje}
+                                                {(() => {
+                                                    const mensaje = notificacion.mensaje;
+                                                    if (typeof mensaje === 'string') {
+                                                        if (mensaje.includes('API key not valid') || mensaje.includes('{"error":')) {
+                                                            return 'Mensaje enviado exitosamente (contenido personalizado no disponible)';
+                                                        }
+                                                        return mensaje;
+                                                    }
+                                                    // If it's not a string, try to stringify it safely
+                                                    try {
+                                                        const stringified = JSON.stringify(mensaje);
+                                                        if (stringified.includes('API key not valid') || stringified.includes('"error":')) {
+                                                            return 'Mensaje enviado exitosamente (contenido personalizado no disponible)';
+                                                        }
+                                                        return stringified;
+                                                    } catch {
+                                                        return 'Mensaje enviado exitosamente';
+                                                    }
+                                                })()}
                                             </p>
                                             <div className="flex items-center space-x-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
                                                 <span>Para: {notificacion.tutorNombre}</span>

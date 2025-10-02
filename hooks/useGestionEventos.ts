@@ -41,6 +41,7 @@ export const useGestionEventos = () => {
     };
 
     const abrirFormulario = (evento: Evento | null = null) => {
+        console.log('DEBUG: useGestionEventos - abrirFormulario called with evento:', evento, 'esAdmin:', esAdmin);
         setEventoEnEdicion(evento);
         setModalFormularioAbierto(true);
     };

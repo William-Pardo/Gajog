@@ -109,7 +109,7 @@ export const useGestionNotificaciones = () => {
                     destinatario,
                     canal,
                     tipo,
-                    mensaje,
+                    mensaje: typeof mensaje === 'string' ? mensaje : JSON.stringify(mensaje),
                     leida: false,
                 });
 
