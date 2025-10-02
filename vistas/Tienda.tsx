@@ -1,5 +1,5 @@
 // vistas/Tienda.tsx - Interfaz Unificada
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useGestionTienda } from '../hooks/useGestionTienda';
 import { useDashboard } from '../hooks/useDashboard';
 import { useGestionEstudiantes } from '../hooks/useGestionEstudiantes';
@@ -38,16 +38,31 @@ const VistaTienda: React.FC = () => {
   // Detectar tab desde la URL
   const currentPath = window.location.hash.replace('#', '') || '/';
   const getTabFromPath = (path: string): 'tienda' | 'dashboard' | 'estudiantes' | 'eventos' | 'notificaciones' | 'configuracion' => {
-    if (path === '/' || path === '/dashboard') return 'dashboard';
+    console.log('DEBUG: getTabFromPath - currentPath:', path);
+    if (path === '/' || path === '/dashboard' || path === '') return 'dashboard';
     if (path === '/estudiantes') return 'estudiantes';
     if (path === '/tienda') return 'tienda';
     if (path === '/eventos') return 'eventos';
     if (path === '/notificaciones') return 'notificaciones';
     if (path === '/configuracion') return 'configuracion';
+    console.log('DEBUG: getTabFromPath - defaulting to tienda for path:', path);
     return 'tienda'; // default
   };
 
   const [activeTab, setActiveTab] = useState<'tienda' | 'dashboard' | 'estudiantes' | 'eventos' | 'notificaciones' | 'configuracion'>(getTabFromPath(currentPath));
+
+  // Actualizar tab cuando cambia el hash
+  useEffect(() => {
+    const handleHashChange = () => {
+      const newPath = window.location.hash.replace('#', '') || '/';
+      const newTab = getTabFromPath(newPath);
+      console.log('DEBUG: Hash changed to:', newPath, 'setting tab to:', newTab);
+      setActiveTab(newTab);
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   // Hooks para todas las funcionalidades
   const tiendaData = useGestionTienda();
