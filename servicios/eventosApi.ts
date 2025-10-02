@@ -27,11 +27,30 @@ const procesarImagenEvento = async (imagenUrl: string | undefined, eventoId: str
         console.warn("MODO SIMULADO: Saltando subida de imagen de evento.");
         return imagenUrl || "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
     }
-    if (imagenUrl && imagenUrl.startsWith('data:image')) {
-        const storageRef = ref(storage, `eventos/${eventoId}/imagen_${Date.now()}`);
-        const snapshot = await uploadString(storageRef, imagenUrl, 'data_url');
-        return await getDownloadURL(snapshot.ref);
+
+    // Si no hay imagen, devolver string vacío
+    if (!imagenUrl) {
+        return '';
     }
+
+    // Si la imagen ya es una URL (no data URL), devolverla tal cual
+    if (imagenUrl.startsWith('http')) {
+        return imagenUrl;
+    }
+
+    // Si es una data URL, intentar subir a Storage
+    if (imagenUrl.startsWith('data:image')) {
+        try {
+            const storageRef = ref(storage, `eventos/${eventoId}/imagen_${Date.now()}`);
+            const snapshot = await uploadString(storageRef, imagenUrl, 'data_url');
+            return await getDownloadURL(snapshot.ref);
+        } catch (error) {
+            console.error("Error al subir imagen del evento:", error);
+            // Si falla la subida, devolver la data URL original para que el evento se guarde
+            return imagenUrl;
+        }
+    }
+
     return imagenUrl || '';
 };
 
@@ -91,8 +110,20 @@ export const agregarEvento = async (nuevoEventoData: Omit<Evento, 'id'>): Promis
     }
     const dataToSave = { ...nuevoEventoData, imagenUrl: '' };
     const docRef = await addDoc(eventosCollection, dataToSave);
-    const imageUrl = await procesarImagenEvento(nuevoEventoData.imagenUrl, docRef.id);
-    await updateDoc(docRef, { imagenUrl: imageUrl });
+
+    // Intentar procesar la imagen, pero no fallar si no se puede
+    let imageUrl = '';
+    try {
+        imageUrl = await procesarImagenEvento(nuevoEventoData.imagenUrl, docRef.id);
+        if (imageUrl !== nuevoEventoData.imagenUrl) {
+            // Solo actualizar si la URL cambió (se subió exitosamente)
+            await updateDoc(docRef, { imagenUrl: imageUrl });
+        }
+    } catch (error) {
+        console.warn("No se pudo procesar la imagen del evento, guardando sin imagen:", error);
+        imageUrl = nuevoEventoData.imagenUrl || '';
+    }
+
     return { id: docRef.id, ...nuevoEventoData, imagenUrl: imageUrl };
 };
 
@@ -103,7 +134,20 @@ export const actualizarEvento = async (eventoActualizado: Evento): Promise<Event
     }
     const { id, ...data } = eventoActualizado;
     const docRef = doc(db, 'eventos', id);
-    const imageUrl = await procesarImagenEvento(data.imagenUrl, id);
+
+    // Intentar procesar la imagen, pero no fallar si no se puede
+    let imageUrl = data.imagenUrl || '';
+    try {
+        const processedUrl = await procesarImagenEvento(data.imagenUrl, id);
+        if (processedUrl !== data.imagenUrl) {
+            // Solo actualizar si la URL cambió (se subió exitosamente)
+            imageUrl = processedUrl;
+        }
+    } catch (error) {
+        console.warn("No se pudo procesar la imagen del evento, manteniendo imagen actual:", error);
+        // Mantener la imagen actual
+    }
+
     const dataToUpdate = { ...data, imagenUrl: imageUrl };
     await updateDoc(docRef, dataToUpdate);
     return { id, ...dataToUpdate };
