@@ -5,9 +5,6 @@ import * as ReactRouterDOM from 'react-router-dom';
 import { obtenerEventoPorId } from '../servicios/api'; // La vista pública aún usa esto
 import { useGestionEventos } from '../hooks/useGestionEventos';
 import { usePaginaPublica } from '../hooks/usePaginaPublica';
-import { useAuth } from '../context/AuthContext';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase/config';
 
 // Componentes
 import FormularioEvento from '../components/FormularioEvento';
@@ -78,20 +75,8 @@ export const VistaEncuentros: React.FC = () => {
     setModalGestionAbierto,
   } = useGestionEventos();
 
-  // Get user from AuthContext
-  const { usuario: usuarioAuth } = useAuth();
-
-  const cambiarRolAdmin = async () => {
-    if (!usuarioAuth?.id) return;
-    try {
-      const userRef = doc(db, 'usuarios', usuarioAuth.id);
-      await updateDoc(userRef, { rol: 'Admin' });
-      alert('✅ Rol actualizado a Admin. Recarga la página para ver los cambios.');
-      window.location.reload();
-    } catch (error) {
-      alert('❌ Error al actualizar rol: ' + error.message);
-    }
-  };
+  // Get user from AuthContext (no longer needed for debug)
+  // const { usuario: usuarioAuth } = useAuth();
 
   const renderContent = () => {
       if (cargando) return <div className="flex justify-center items-center h-full p-8"><Loader texto="Cargando encuentros..." /></div>;
@@ -126,25 +111,6 @@ export const VistaEncuentros: React.FC = () => {
     <div className="p-8">
       <div className="flex flex-wrap gap-4 justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-tkd-dark dark:text-white">Encuentros</h1>
-        <div className="text-sm text-red-500 font-bold bg-yellow-100 p-4 rounded border-2 border-red-300">
-          🔧 DEBUG: Admin: {esAdmin ? 'Sí' : 'No'} | Usuario: {usuarioAuth ? JSON.stringify({ id: usuarioAuth.id, rol: usuarioAuth.rol, nombre: usuarioAuth.nombreUsuario }) : 'null'}
-          <br/>
-          {!esAdmin && (
-            <div className="mt-3">
-              <button
-                onClick={() => {
-                  console.log('Botón clicked, calling cambiarRolAdmin');
-                  cambiarRolAdmin();
-                }}
-                className="bg-red-600 text-white px-4 py-2 rounded font-bold text-sm hover:bg-red-700 border-2 border-red-800"
-              >
-                🚀 CAMBIAR A ADMIN
-              </button>
-              <p className="text-xs mt-1 text-red-700">Haz clic aquí para habilitar la edición de eventos</p>
-            </div>
-          )}
-          {esAdmin && <p className="text-green-600 font-bold mt-2">✅ ¡Ya eres Admin! Los botones de edición deberían estar visibles.</p>}
-        </div>
         <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
                 <label htmlFor="mostrar-futuros" className="text-sm font-medium text-gray-700 dark:text-gray-300">Mostrar solo futuros</label>
