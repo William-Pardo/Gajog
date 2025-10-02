@@ -1,7 +1,7 @@
 // componentes/FormularioEvento.tsx
 // Formulario modal para crear y editar eventos.
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -48,8 +48,8 @@ type FormData = yup.InferType<typeof schema>;
 
 const FormularioEvento: React.FC<Props> = ({ abierto, onCerrar, onGuardar, eventoActual, cargando }) => {
   const [visible, setVisible] = useState(false);
-  
-  const defaultValues: FormData = {
+
+  const defaultValues: FormData = useMemo(() => ({
     nombre: '',
     descripcion: '',
     lugar: '',
@@ -59,7 +59,7 @@ const FormularioEvento: React.FC<Props> = ({ abierto, onCerrar, onGuardar, event
     valor: 0,
     requisitos: '',
     imagenUrl: ''
-  };
+  }), []);
 
   const { register, handleSubmit, formState: { errors, isValid }, reset, setValue, watch } = useForm<FormData>({
     // FIX: Removed the explicit generic type argument from yupResolver to fix type compatibility issues with recent versions of react-hook-form and @hookform/resolvers.
@@ -103,7 +103,7 @@ const FormularioEvento: React.FC<Props> = ({ abierto, onCerrar, onGuardar, event
             } : defaultValues);
         }
     }
-  }, [abierto, eventoActual, reset, hasDraft, defaultValues]);
+  }, [abierto, eventoActual, reset, hasDraft]);
 
   useEffect(() => {
     if (abierto) {
@@ -150,7 +150,6 @@ const FormularioEvento: React.FC<Props> = ({ abierto, onCerrar, onGuardar, event
 
   if (!abierto) return null;
 
-  console.log('DEBUG: FormularioEvento rendering, abierto:', abierto, 'eventoActual:', eventoActual);
   return (
     <div className={`fixed inset-0 z-50 flex items-center justify-center bg-black transition-opacity duration-200 ease-out ${visible ? 'bg-opacity-60' : 'bg-opacity-0'}`} aria-modal="true" role="dialog" onClick={handleClose}>
       <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] flex flex-col transform transition-all duration-200 ease-out ${visible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`} onClick={e => e.stopPropagation()}>
@@ -165,16 +164,6 @@ const FormularioEvento: React.FC<Props> = ({ abierto, onCerrar, onGuardar, event
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 overflow-y-auto space-y-4">
           {hasDraft && <AutosavePrompt onRestore={restoreDraft} onDiscard={clearDraft} />}
-          {/* DEBUG INPUT */}
-          <div className="bg-yellow-100 p-2 rounded border">
-            <label className="block text-sm font-bold text-red-600">DEBUG TEST INPUT</label>
-            <input
-              type="text"
-              placeholder="Escribe aquí para probar..."
-              onChange={(e) => console.log('DEBUG: Input changed to:', e.target.value)}
-              className="mt-1 block w-full border-2 border-red-500 rounded-md p-2"
-            />
-          </div>
           <div>
             <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre del Evento</label>
             <input type="text" {...register('nombre')} className={`mt-1 block w-full border rounded-md shadow-sm sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors ${errors.nombre ? 'border-red-500' : 'border-gray-300'}`} />
