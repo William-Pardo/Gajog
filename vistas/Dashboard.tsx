@@ -43,6 +43,7 @@ const VistaDashboard: React.FC = () => {
         );
     }
 
+    console.log('DEBUG: VistaDashboard rendering');
     return (
         <div className="p-4 sm:p-8 space-y-8">
             <h1 className="text-3xl font-bold text-tkd-dark dark:text-white">

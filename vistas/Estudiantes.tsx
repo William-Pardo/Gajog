@@ -56,18 +56,19 @@ export const VistaEstudiantes: React.FC = () => {
     const renderContent = () => {
         if (cargando) return <TablaEstudiantesSkeleton />;
         if (error) return <ErrorState mensaje={error} onReintentar={cargarEstudiantes} />;
-        
+
         const tieneEstudiantes = estudiantes.length > 0;
         const filtrosSinResultados = tieneEstudiantes && estudiantesFiltrados.length === 0;
 
         if (filtrosSinResultados) {
             return <EmptyState Icono={IconoEstudiantes} titulo="Sin resultados" mensaje="Ningún estudiante coincide con los filtros actuales. Prueba a cambiarlos o limpiarlos." />;
         }
+
         if (tieneEstudiantes) {
             return <TablaEstudiantes estudiantes={estudiantesPaginados} onEditar={abrirFormulario} onEliminar={abrirConfirmacionEliminar} onVerFirma={abrirModalFirma} onCompartirLink={handleShareLink} />;
         }
         return (
-             <EmptyState Icono={IconoEstudiantes} titulo="Aún no hay estudiantes" mensaje="Empieza a gestionar tu escuela agregando tu primer estudiante.">
+              <EmptyState Icono={IconoEstudiantes} titulo="Aún no hay estudiantes" mensaje="Empieza a gestionar tu escuela agregando tu primer estudiante.">
                 <button onClick={() => abrirFormulario()} className="bg-tkd-blue text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-800 transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 inline-flex items-center space-x-2 shadow-md hover:shadow-lg">
                     <IconoAgregar className="w-5 h-5" /><span>Agregar Estudiante</span>
                 </button>

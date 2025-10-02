@@ -1,5 +1,5 @@
 // App.tsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Component, ReactNode } from 'react';
 // FIX: Changed to namespace import to fix module resolution issues.
 import * as ReactRouterDOM from 'react-router-dom';
 import { AnimatePresence, motion, Transition } from 'framer-motion';
@@ -93,6 +93,30 @@ const pageVariants = {
 };
 const pageTransition: Transition = { duration: 0.25, ease: 'easeInOut' };
 
+// Error Boundary Component
+class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+    constructor(props: { children: ReactNode }) {
+        super(props);
+        this.state = { hasError: false };
+    }
+
+    static getDerivedStateFromError(_: Error) {
+        return { hasError: true };
+    }
+
+    componentDidCatch(error: Error, errorInfo: any) {
+        console.error('ErrorBoundary caught an error:', error, errorInfo);
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return <div className="p-8 text-red-500">Error: Component failed to render</div>;
+        }
+
+        return this.props.children;
+    }
+}
+
 const AppLayout: React.FC = () => {
     const { usuario, logout } = useAuth();
     const location = ReactRouterDOM.useLocation();
@@ -145,12 +169,10 @@ const AppLayout: React.FC = () => {
                     </div>
                 </header>
                 <div className="flex-1 overflow-y-auto" ref={scrollableContainerRef}>
-                     <AnimatePresence mode="wait">
-                        <motion.div key={location.pathname} variants={pageVariants} initial="hidden" animate="visible" exit="out" transition={pageTransition}>
-                            <ReactRouterDOM.Outlet />
-                        </motion.div>
-                    </AnimatePresence>
-                </div>
+                      <ErrorBoundary>
+                         <ReactRouterDOM.Outlet />
+                      </ErrorBoundary>
+                 </div>
                 <Footer />
             </main>
             <BotonVolverArriba scrollContainerRef={scrollableContainerRef} />
@@ -184,7 +206,7 @@ const RutaProtegida: React.FC<{ children: React.ReactElement }> = ({ children })
 
 const AppRoutes: React.FC = () => {
     const { usuario, cargandoSesion } = useAuth();
-    
+
     if (cargandoSesion) {
         return (
             <div className="flex items-center justify-center h-screen bg-tkd-blue text-white">

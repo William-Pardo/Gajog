@@ -1,7 +1,5 @@
 // hooks/useGestionEstudiantes.ts
 import { useState, useMemo, useCallback, useEffect } from 'react';
-// FIX: Changed to namespace import to fix module resolution issues.
-import * as ReactRouterDOM from 'react-router-dom';
 import type { Estudiante } from '../tipos';
 import { GrupoEdad, EstadoPago, TipoNotificacion } from '../tipos';
 import { enviarNotificacion } from '../servicios/api';
@@ -15,7 +13,6 @@ const ITEMS_PER_PAGE = 10;
 export const useGestionEstudiantes = () => {
     const { estudiantes, cargando, error, agregarEstudiante, actualizarEstudiante, eliminarEstudiante, cargarEstudiantes } = useEstudiantes();
     const { mostrarNotificacion } = useNotificacion();
-    const location = ReactRouterDOM.useLocation();
 
     // Estado local para UI
     const [filtroNombre, setFiltroNombre] = useState('');
@@ -31,13 +28,13 @@ export const useGestionEstudiantes = () => {
     const [currentPage, setCurrentPage] = useState(1);
 
     // Efecto para leer el parámetro de búsqueda de la URL
-    useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const query = params.get('q');
-        if (query) {
-            setFiltroNombre(query);
-        }
-    }, [location.search]);
+    // useEffect(() => {
+    //     const params = new URLSearchParams(location.search);
+    //     const query = params.get('q');
+    //     if (query) {
+    //         setFiltroNombre(query);
+    //     }
+    // }, [location.search]);
 
     const estudiantesFiltrados = useMemo(() => {
         if (error) return [];

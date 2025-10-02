@@ -145,6 +145,15 @@ VAPID_KEY=PLACEHOLDER_VAPID_KEY
 
 ## 📋 ÚLTIMAS ACTUALIZACIONES
 
+### 🔄 Commit: `866928b`
+**Fecha**: 2025-10-02
+**Mensaje**: docs: Crear archivo contexto_global.md con documentación completa del proyecto
+**Cambios**:
+- Crear archivo contexto_global.md con documentación completa
+- Incluir script "guardarles" para guardar y desplegar cambios
+- Documentar todas las funcionalidades implementadas
+- Agregar historial de commits y métricas de éxito
+
 ### 🔄 Commit: `ef50570`
 **Fecha**: 2025-10-02
 **Mensaje**: feat: Habilitar sección de configuración para usuarios normales
@@ -202,4 +211,4 @@ VAPID_KEY=PLACEHOLDER_VAPID_KEY
 
 ---
 
-*Este archivo se actualiza automáticamente con cada ejecución del script "guardarles". Última actualización: 2025-10-02*
+*Este archivo se actualiza automáticamente con cada ejecución del script "guardarles". Última actualización: 2025-10-02 02:32*

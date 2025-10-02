@@ -13,6 +13,7 @@ import ErrorState from '../components/ErrorState';
 import EmptyState from '../components/EmptyState';
 
 const VistaTienda: React.FC = () => {
+  console.log('DEBUG: VistaTienda rendering');
   const {
     implementos,
     implementosFiltrados,

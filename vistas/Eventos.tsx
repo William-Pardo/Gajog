@@ -76,6 +76,7 @@ export const VistaEventos: React.FC = () => {
   } = useGestionEventos();
 
   const renderContent = () => {
+      console.log('DEBUG: renderContent - cargando:', cargando, 'error:', error, 'eventos length:', eventos.length);
       if (cargando) return <div className="flex justify-center items-center h-full p-8"><Loader texto="Cargando eventos..." /></div>;
       if (error) return <ErrorState mensaje={error} onReintentar={cargarEventos} />;
       
@@ -104,6 +105,7 @@ export const VistaEventos: React.FC = () => {
       );
   }
 
+  console.log('DEBUG: VistaEventos rendering');
   return (
     <div className="p-8">
       <div className="flex flex-wrap gap-4 justify-between items-center mb-6">
