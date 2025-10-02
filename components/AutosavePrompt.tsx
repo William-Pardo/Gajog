@@ -10,10 +10,10 @@ interface AutosavePromptProps {
 const AutosavePrompt: React.FC<AutosavePromptProps> = ({ onRestore, onDiscard }) => {
   return (
     <div
-      className="mb-4 p-3 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-300 dark:border-yellow-700 rounded-lg flex flex-col sm:flex-row items-center justify-between gap-3"
+      className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-300 dark:border-blue-700 rounded-lg flex flex-col sm:flex-row items-center justify-between gap-3"
       role="alert"
     >
-      <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200 text-center sm:text-left">
+      <p className="text-sm font-medium text-blue-800 dark:text-blue-200 text-center sm:text-left">
         Encontramos un borrador no guardado. ¿Deseas continuar donde lo dejaste?
       </p>
       <div className="flex space-x-2 flex-shrink-0">
