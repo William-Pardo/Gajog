@@ -1,12 +1,32 @@
-// vistas/Tienda.tsx
-import React from 'react';
+// vistas/Tienda.tsx - Interfaz Unificada
+import React, { useState } from 'react';
 import { useGestionTienda } from '../hooks/useGestionTienda';
+import { useDashboard } from '../hooks/useDashboard';
+import { useGestionEstudiantes } from '../hooks/useGestionEstudiantes';
+import { useGestionEventos } from '../hooks/useGestionEventos';
+import { useGestionNotificaciones } from '../hooks/useGestionNotificaciones';
 
 // Componentes
 import ModalSeleccionarEstudiante from '../components/ModalSeleccionarEstudiante';
 import ModalCompartirTienda from '../components/ModalCompartirTienda';
 import FiltrosTienda from '../components/FiltrosTienda';
-import { IconoCompartir, IconoCarritoAgregar, IconoTienda } from '../components/Iconos';
+import SolicitudesCompraPendientes from '../components/dashboard/SolicitudesCompraPendientes';
+import FiltrosDashboard from '../components/dashboard/FiltrosDashboard';
+import ResumenKPIs from '../components/dashboard/ResumenKPIs';
+import ProximosEventos from '../components/dashboard/ProximosEventos';
+import ResumenPagos from '../components/dashboard/ResumenPagos';
+import AccesosDirectos from '../components/dashboard/AccesosDirectos';
+import FiltrosEstudiantes from '../components/FiltrosEstudiantes';
+import TablaEstudiantes from '../components/TablaEstudiantes';
+import { TablaEstudiantesSkeleton } from '../components/skeletons/TablaEstudiantesSkeleton';
+import FormularioEvento from '../components/FormularioEvento';
+import ModalConfirmacion from '../components/ModalConfirmacion';
+import ToggleSwitch from '../components/ToggleSwitch';
+import ModalCompartirEvento from '../components/ModalCompartirEvento';
+import ModalGestionarSolicitudes from '../components/ModalGestionarSolicitudes';
+import { IconoEnviar, IconoHistorial, IconoAprobar } from '../components/Iconos';
+import TarjetaHistorial from '../components/TarjetaHistorial';
+import { IconoCompartir, IconoCarritoAgregar, IconoTienda, IconoDashboard, IconoEstudiantes, IconoEventos, IconoCampana, IconoConfiguracion, IconoAgregar, IconoExportar } from '../components/Iconos';
 import { formatearPrecio } from '../utils/formatters';
 import Loader from '../components/Loader';
 import ErrorState from '../components/ErrorState';
@@ -14,11 +34,20 @@ import EmptyState from '../components/EmptyState';
 
 const VistaTienda: React.FC = () => {
   console.log('DEBUG: VistaTienda rendering');
+  const [activeTab, setActiveTab] = useState<'tienda' | 'dashboard' | 'estudiantes' | 'eventos' | 'notificaciones' | 'configuracion'>('tienda');
+
+  // Hooks para todas las funcionalidades
+  const tiendaData = useGestionTienda();
+  const dashboardData = useDashboard();
+  const estudiantesData = useGestionEstudiantes();
+  const eventosData = useGestionEventos();
+  const notificacionesData = useGestionNotificaciones();
+
   const {
     implementos,
     implementosFiltrados,
-    cargando,
-    error,
+    cargando: cargandoTienda,
+    error: errorTienda,
     cargarDatosTienda,
     estudiantes,
     cargandoEstudiantes,
@@ -37,11 +66,11 @@ const VistaTienda: React.FC = () => {
     filtroPrecio,
     setFiltroPrecio,
     limpiarFiltros,
-  } = useGestionTienda();
+  } = tiendaData;
 
   const renderContent = () => {
-    if (cargando) return <div className="flex justify-center items-center h-full p-8"><Loader texto="Cargando implementos..." /></div>;
-    if (error) return <ErrorState mensaje={error} onReintentar={cargarDatosTienda} />;
+    if (cargandoTienda) return <div className="flex justify-center items-center h-full p-8"><Loader texto="Cargando implementos..." /></div>;
+    if (errorTienda) return <ErrorState mensaje={errorTienda} onReintentar={cargarDatosTienda} />;
     
     if (implementos.length === 0) {
       return <EmptyState Icono={IconoTienda} titulo="Tienda Vacía" mensaje="Actualmente no hay implementos disponibles para la venta." />;
@@ -88,24 +117,83 @@ const VistaTienda: React.FC = () => {
     );
   };
 
+  const tabs = [
+    { id: 'tienda' as const, label: 'Tienda', icon: IconoTienda },
+    { id: 'dashboard' as const, label: 'Dashboard', icon: IconoDashboard },
+    { id: 'estudiantes' as const, label: 'Estudiantes', icon: IconoEstudiantes },
+    { id: 'eventos' as const, label: 'Eventos', icon: IconoEventos },
+    { id: 'notificaciones' as const, label: 'Alertas', icon: IconoCampana },
+    { id: 'configuracion' as const, label: 'Configuración', icon: IconoConfiguracion },
+  ];
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'tienda':
+        return (
+          <div className="space-y-6">
+            <div className="flex flex-wrap gap-4 justify-between items-center">
+              <h2 className="text-2xl font-bold text-tkd-dark dark:text-white">Tienda de Implementos</h2>
+              <button onClick={() => setModalCompartirAbierto(true)} className="bg-green-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-green-700 transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 inline-flex items-center space-x-2 shadow-md hover:shadow-lg">
+                <IconoCompartir className="w-5 h-5" /><span>Compartir Tienda</span>
+              </button>
+            </div>
+
+            <FiltrosTienda
+              filtroCategoria={filtroCategoria}
+              setFiltroCategoria={setFiltroCategoria}
+              filtroPrecio={filtroPrecio}
+              setFiltroPrecio={setFiltroPrecio}
+              limpiarFiltros={limpiarFiltros}
+            />
+
+            {renderContent()}
+          </div>
+        );
+
+      case 'dashboard':
+        return <div className="text-center py-8">Dashboard - Funcionalidad próximamente</div>;
+
+      case 'estudiantes':
+        return <div className="text-center py-8">Gestión de Estudiantes - Funcionalidad próximamente</div>;
+
+      case 'eventos':
+        return <div className="text-center py-8">Gestión de Eventos - Funcionalidad próximamente</div>;
+
+      case 'notificaciones':
+        return <div className="text-center py-8">Sistema de Notificaciones - Funcionalidad próximamente</div>;
+
+      case 'configuracion':
+        return <div className="text-center py-8">Panel de Configuración - Funcionalidad próximamente</div>;
+
+      default:
+        return <div>Contenido no encontrado</div>;
+    }
+  };
+
   return (
     <div className="p-8">
-      <div className="flex flex-wrap gap-4 justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-tkd-dark dark:text-white">Tienda de Implementos</h1>
-        <button onClick={() => setModalCompartirAbierto(true)} className="bg-green-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-green-700 transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 inline-flex items-center space-x-2 shadow-md hover:shadow-lg">
-          <IconoCompartir className="w-5 h-5" /><span>Compartir Tienda</span>
-        </button>
+      {/* Tab Navigation */}
+      <div className="flex flex-wrap gap-2 mb-8 border-b border-gray-200 dark:border-gray-700 pb-4">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+              activeTab === tab.id
+                ? 'bg-tkd-blue text-white shadow-md'
+                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+            }`}
+          >
+            <tab.icon className="w-5 h-5" />
+            <span>{tab.label}</span>
+          </button>
+        ))}
       </div>
 
-      <FiltrosTienda
-        filtroCategoria={filtroCategoria}
-        setFiltroCategoria={setFiltroCategoria}
-        filtroPrecio={filtroPrecio}
-        setFiltroPrecio={setFiltroPrecio}
-        limpiarFiltros={limpiarFiltros}
-      />
+      {/* Tab Content */}
+      {renderTabContent()}
 
-      {renderContent()}
+      {/* Modals */}
       {modalAbierto && compraSeleccionada && (
         (() => {
           console.log('VistaTienda - Pasando estudiantes al modal:', estudiantes.map(e => ({ id: e.id, nombre: `${e.nombres} ${e.apellidos}` })));
