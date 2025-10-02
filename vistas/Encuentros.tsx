@@ -5,6 +5,7 @@ import * as ReactRouterDOM from 'react-router-dom';
 import { obtenerEventoPorId } from '../servicios/api'; // La vista pública aún usa esto
 import { useGestionEventos } from '../hooks/useGestionEventos';
 import { usePaginaPublica } from '../hooks/usePaginaPublica';
+import { useAuth } from '../context/AuthContext';
 
 // Componentes
 import FormularioEvento from '../components/FormularioEvento';
@@ -75,6 +76,9 @@ export const VistaEncuentros: React.FC = () => {
     setModalGestionAbierto,
   } = useGestionEventos();
 
+  // Get user from AuthContext
+  const { usuario: usuarioAuth } = useAuth();
+
   const renderContent = () => {
       if (cargando) return <div className="flex justify-center items-center h-full p-8"><Loader texto="Cargando encuentros..." /></div>;
       if (error) return <ErrorState mensaje={error} onReintentar={cargarEventos} />;
@@ -108,7 +112,7 @@ export const VistaEncuentros: React.FC = () => {
     <div className="p-8">
       <div className="flex flex-wrap gap-4 justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-tkd-dark dark:text-white">Encuentros</h1>
-        <div className="text-sm text-red-500 font-bold bg-yellow-100 p-2 rounded">🔧 DEBUG: Admin: {esAdmin ? 'Sí' : 'No'} | Usuario: {JSON.stringify({ rol: 'checking' })}</div>
+        <div className="text-sm text-red-500 font-bold bg-yellow-100 p-2 rounded">🔧 DEBUG: Admin: {esAdmin ? 'Sí' : 'No'} | Usuario: {usuarioAuth ? JSON.stringify({ id: usuarioAuth.id, rol: usuarioAuth.rol, nombre: usuarioAuth.nombreUsuario }) : 'null'}</div>
         <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
                 <label htmlFor="mostrar-futuros" className="text-sm font-medium text-gray-700 dark:text-gray-300">Mostrar solo futuros</label>
