@@ -15,9 +15,13 @@ const useEstudiantesDirectos = () => {
   useEffect(() => {
     const cargarEstudiantes = async () => {
       try {
+        console.log('useEstudiantesDirectos - Iniciando carga de estudiantes...');
         const data = await obtenerEstudiantes();
+        console.log('useEstudiantesDirectos - Estudiantes obtenidos de API (raw):', data);
         console.log('useEstudiantesDirectos - Estudiantes obtenidos de API (IDs):', data.map(e => e.id));
+        console.log('useEstudiantesDirectos - Estudiantes obtenidos de API (nombres):', data.map(e => e.nombres));
         setEstudiantes(data);
+        console.log('useEstudiantesDirectos - Estado actualizado con estudiantes');
       } catch (error) {
         console.error('Error cargando estudiantes:', error);
       } finally {
