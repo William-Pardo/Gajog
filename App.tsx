@@ -225,12 +225,12 @@ const AppRoutes: React.FC = () => {
             <ReactRouterDOM.Route path="/tienda-publica" element={<VistaTiendaPublica />} />
 
             <ReactRouterDOM.Route element={<RutaProtegida><AppLayoutWithData /></RutaProtegida>}>
-                <ReactRouterDOM.Route path="/" element={<VistaTienda />} />
-                <ReactRouterDOM.Route path="/estudiantes" element={<VistaTienda />} />
+                <ReactRouterDOM.Route path="/" element={<VistaDashboard />} />
+                <ReactRouterDOM.Route path="/estudiantes" element={<VistaEstudiantes />} />
                 <ReactRouterDOM.Route path="/tienda" element={<VistaTienda />} />
-                <ReactRouterDOM.Route path="/eventos" element={<VistaTienda />} />
-                <ReactRouterDOM.Route path="/notificaciones" element={<VistaTienda />} />
-                <ReactRouterDOM.Route path="/configuracion" element={<VistaTienda />} />
+                <ReactRouterDOM.Route path="/eventos" element={<VistaEventos />} />
+                <ReactRouterDOM.Route path="/notificaciones" element={<VistaNotificaciones />} />
+                <ReactRouterDOM.Route path="/configuracion" element={<VistaConfiguracion />} />
             </ReactRouterDOM.Route>
 
             <ReactRouterDOM.Route path="*" element={<Vista404 />} />
