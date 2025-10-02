@@ -51,7 +51,7 @@ const BarraLateral: React.FC<{ estaAbierta: boolean; onCerrar: () => void; onLog
         { ruta: "/tienda", texto: "Tienda", icono: IconoTienda, rol: RolUsuario.Usuario },
         { ruta: "/eventos", texto: "Eventos", icono: IconoEventos, rol: RolUsuario.Usuario },
         { ruta: "/notificaciones", texto: "Alertas", icono: IconoCampana, rol: RolUsuario.Usuario },
-        { ruta: "/configuracion", texto: "Configuración", icono: IconoConfiguracion, rol: RolUsuario.Admin },
+        { ruta: "/configuracion", texto: "Configuración", icono: IconoConfiguracion, rol: RolUsuario.Usuario },
     ];
     
     // Ancho variable para el modo colapsado en desktop
@@ -208,7 +208,7 @@ const AppRoutes: React.FC = () => {
                 <ReactRouterDOM.Route path="/tienda" element={<VistaTienda />} />
                 <ReactRouterDOM.Route path="/eventos" element={<VistaEventos />} />
                 <ReactRouterDOM.Route path="/notificaciones" element={<VistaNotificaciones />} />
-                <ReactRouterDOM.Route path="/configuracion" element={usuario?.rol === RolUsuario.Admin ? <VistaConfiguracion /> : <ReactRouterDOM.Navigate to="/" />} />
+                <ReactRouterDOM.Route path="/configuracion" element={<VistaConfiguracion />} />
             </ReactRouterDOM.Route>
 
             <ReactRouterDOM.Route path="*" element={<Vista404 />} />
