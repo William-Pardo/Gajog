@@ -44,7 +44,7 @@ const ProximosEventos: React.FC<Props> = ({ eventos }) => {
       </div>
       <div className="mt-6 text-right">
         <ReactRouterDOM.Link
-          to="/eventos"
+          to="/encuentros"
           className="text-sm font-semibold text-tkd-blue hover:underline dark:hover:text-blue-400"
         >
           Ver todos los eventos →

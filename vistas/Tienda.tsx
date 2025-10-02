@@ -45,7 +45,7 @@ const VistaTienda: React.FC = () => {
     if (path === '/' || path === '/dashboard') return 'dashboard';
     if (path === '/estudiantes') return 'estudiantes';
     if (path === '/tienda') return 'tienda';
-    if (path === '/eventos') return 'eventos';
+    if (path === '/encuentros') return 'encuentros';
     if (path === '/notificaciones') return 'notificaciones';
     if (path === '/configuracion') return 'configuracion';
     console.log('DEBUG: getTabFromPath - defaulting to tienda for path:', path);

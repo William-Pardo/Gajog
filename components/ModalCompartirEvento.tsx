@@ -39,7 +39,7 @@ const ModalCompartirEvento: React.FC<Props> = ({ abierto, onCerrar, evento }) =>
 
   if (!abierto) return null;
 
-  const url = generarUrlAbsoluta(`/evento/${evento.id}`);
+  const url = generarUrlAbsoluta(`/encuentro/${evento.id}`);
   const texto = `¡Te invitamos a nuestro próximo evento: "${evento.nombre}"! Haz clic en el enlace para ver más detalles y solicitar tu inscripción:`;
   const textoEncoded = encodeURIComponent(texto);
   const urlEncoded = encodeURIComponent(url);
