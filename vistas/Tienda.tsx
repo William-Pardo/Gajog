@@ -34,7 +34,7 @@ import ErrorState from '../components/ErrorState';
 import EmptyState from '../components/EmptyState';
 
 const VistaTienda: React.FC = () => {
-  console.log('DEBUG: VistaTienda rendering');
+  console.log('DEBUG: VistaTienda rendering for path:', window.location.hash);
 
   // Usar React Router para detectar la ruta actual
   const location = ReactRouterDOM.useLocation();
@@ -194,18 +194,17 @@ const VistaTienda: React.FC = () => {
       {/* Tab Navigation */}
       <div className="flex flex-wrap gap-2 mb-8 border-b border-gray-200 dark:border-gray-700 pb-4">
         {tabs.map((tab) => (
-          <button
+          <div
             key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
             className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
               activeTab === tab.id
                 ? 'bg-tkd-blue text-white shadow-md'
-                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                : 'text-gray-600 dark:text-gray-400'
             }`}
           >
             <tab.icon className="w-5 h-5" />
             <span>{tab.label}</span>
-          </button>
+          </div>
         ))}
       </div>
 
