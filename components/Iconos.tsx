@@ -92,7 +92,7 @@ export const IconoContrato: React.FC<IconoProps> = (props) => (<BaseIcon {...pro
 export const IconoCopiar: React.FC<IconoProps> = (props) => (<BaseIcon {...props}><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></BaseIcon>);
 export const IconoEditar: React.FC<IconoProps> = (props) => (<BaseIcon {...props}><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></BaseIcon>);
 export const IconoEliminar: React.FC<IconoProps> = (props) => (<BaseIcon {...props}><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></BaseIcon>);
-export const IconoEmail: React.FC<IconoProps> = (props) => (<BaseIcon {...props}><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></BaseIcon>);
+export const IconoEmail: React.FC<IconoProps> = (props) => (<BaseIcon {...props}><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/><path d="M2 6l10 8 10-8"/></BaseIcon>);
 export const IconoEnlace: React.FC<IconoProps> = (props) => (<BaseIcon {...props}><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.71"/></BaseIcon>);
 export const IconoEnviar: React.FC<IconoProps> = (props) => (<BaseIcon {...props}><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></BaseIcon>);
 export const IconoExportar: React.FC<IconoProps> = (props) => (<BaseIcon {...props}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></BaseIcon>);
@@ -109,7 +109,7 @@ export const IconoOjoAbierto: React.FC<IconoProps> = (props) => (<BaseIcon {...p
 export const IconoOjoCerrado: React.FC<IconoProps> = (props) => (<BaseIcon {...props}><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></BaseIcon>);
 export const IconoRechazar: React.FC<IconoProps> = (props) => (<BaseIcon {...props}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></BaseIcon>);
 export const IconoUsuario: React.FC<IconoProps> = (props) => (<BaseIcon {...props}><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></BaseIcon>);
-export const IconoWhatsApp: React.FC<IconoProps> = (props) => (<BaseIcon {...props}><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></BaseIcon>);
+export const IconoWhatsApp: React.FC<IconoProps> = (props) => (<BaseIcon {...props}><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/><path d="M9 9l2 2 4-4"/></BaseIcon>);
 export const IconoXTwitter: React.FC<IconoProps> = (props) => (<BaseIcon {...props}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></BaseIcon>);
 
 // --- Iconos Animados ---
