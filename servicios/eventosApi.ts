@@ -159,8 +159,17 @@ export const actualizarEvento = async (eventoActualizado: Evento): Promise<Event
         // Mantener la imagen actual
     }
 
-    const dataToUpdate = { ...data, imagenUrl: imageUrl };
-    console.log('DEBUG: Data to update:', dataToUpdate);
+    // Check if the image URL is too long for Firestore (limit is ~1MB per document)
+    const MAX_FIRESTORE_SIZE = 1048487; // ~1MB
+    let finalImageUrl = imageUrl;
+
+    if (imageUrl && imageUrl.length > MAX_FIRESTORE_SIZE) {
+        console.warn('DEBUG: Image URL too long for Firestore, storing empty string instead');
+        finalImageUrl = ''; // Don't store the large base64 image
+    }
+
+    const dataToUpdate = { ...data, imagenUrl: finalImageUrl };
+    console.log('DEBUG: Data to update (final):', dataToUpdate);
     try {
         await updateDoc(docRef, dataToUpdate);
         console.log('DEBUG: updateDoc successful');
