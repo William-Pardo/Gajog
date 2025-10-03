@@ -12,11 +12,11 @@ const TarjetaHistorial: React.FC<Props> = ({ item, onMarcarLeida }) => {
     const [expandido, setExpandido] = useState(false);
     
     const containerClasses = item.leida
-        ? 'opacity-70 bg-gray-50 dark:bg-gray-800/50'
-        : 'bg-white dark:bg-gray-800';
+        ? 'opacity-70 bg-gray-50 dark:bg-tkd-dark'
+        : 'bg-white dark:bg-tkd-dark';
 
     return (
-        <div className={`p-4 rounded-lg shadow-sm border dark:border-gray-700 transition-opacity duration-300 ${containerClasses}`}>
+        <div className={`p-4 rounded-lg shadow-md border dark:border-gray-600 transition-opacity duration-300 ${containerClasses}`}>
             <div className="flex justify-between items-start gap-4">
                 <div>
                     <p className="font-bold text-tkd-dark dark:text-white">{item.estudianteNombre}</p>
