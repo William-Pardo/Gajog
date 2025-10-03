@@ -52,17 +52,21 @@ export const useGestionEventos = () => {
     };
     
     const guardarEventoHandler = async (datosEvento: Omit<Evento, 'id'> | Evento) => {
+        console.log('DEBUG: guardarEventoHandler called with:', datosEvento);
         setCargandoCRUD(true);
         try {
         if ('id' in datosEvento) {
+            console.log('DEBUG: Updating existing event');
             await actualizarEvento(datosEvento);
             mostrarNotificacion("Evento actualizado correctamente.", "success");
         } else {
+            console.log('DEBUG: Creating new event');
             await agregarEvento(datosEvento);
             mostrarNotificacion("Evento agregado correctamente.", "success");
         }
         cerrarFormulario();
         } catch (error) {
+        console.error('DEBUG: guardarEventoHandler failed:', error);
         mostrarNotificacion("No se pudo guardar el evento.", "error");
         throw error;
         } finally {

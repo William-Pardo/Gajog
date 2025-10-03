@@ -137,11 +137,13 @@ export const agregarEvento = async (nuevoEventoData: Omit<Evento, 'id'>): Promis
 };
 
 export const actualizarEvento = async (eventoActualizado: Evento): Promise<Evento> => {
+     console.log('DEBUG: actualizarEvento called with:', eventoActualizado);
      if (!isFirebaseConfigured) {
         console.warn("MODO SIMULADO: Actualizando evento.");
         return eventoActualizado;
     }
     const { id, ...data } = eventoActualizado;
+    console.log('DEBUG: Extracted id:', id, 'data:', data);
     const docRef = doc(db, 'eventos', id);
 
     // Intentar procesar la imagen, pero no fallar si no se puede
@@ -158,8 +160,15 @@ export const actualizarEvento = async (eventoActualizado: Evento): Promise<Event
     }
 
     const dataToUpdate = { ...data, imagenUrl: imageUrl };
-    await updateDoc(docRef, dataToUpdate);
-    return { id, ...dataToUpdate };
+    console.log('DEBUG: Data to update:', dataToUpdate);
+    try {
+        await updateDoc(docRef, dataToUpdate);
+        console.log('DEBUG: updateDoc successful');
+        return { id, ...dataToUpdate };
+    } catch (error) {
+        console.error('DEBUG: updateDoc failed:', error);
+        throw error;
+    }
 };
 
 export const eliminarEvento = async (idEvento: string): Promise<void> => {
