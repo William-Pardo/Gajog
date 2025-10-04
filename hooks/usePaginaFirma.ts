@@ -82,73 +82,127 @@ export const usePaginaFirma = ({ idEstudiante, tipo }: UsePaginaFirmaProps) => {
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas || enviadoConExito) return;
-        
+
         const context = canvas.getContext('2d');
         if(!context) return;
-        
+
+        // Clear canvas first to ensure clean state
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Handle high-DPI displays with uniform scaling
+        const devicePixelRatio = window.devicePixelRatio || 1;
+
+        // Reset scale to avoid accumulation
+        context.setTransform(1, 0, 0, 1, 0, 0);
+
+        // Scale context for crisp rendering on high-DPI
+        context.scale(devicePixelRatio, devicePixelRatio);
         context.lineCap = 'round';
+
+        // Dark stroke color that works well on white canvas background in both light and dark modes
         context.strokeStyle = '#110e0f';
-        context.lineWidth = 3;
+        context.lineWidth = 3 * devicePixelRatio;
 
         let isDrawing = false;
         let lastX = 0;
         let lastY = 0;
 
-        const getCoords = (e: MouseEvent | TouchEvent) => {
-             if (e instanceof TouchEvent) {
-                const rect = canvas.getBoundingClientRect();
-                return { 
-                    offsetX: e.touches[0].clientX - rect.left, 
-                    offsetY: e.touches[0].clientY - rect.top 
-                };
-            }
-            return { offsetX: e.offsetX, offsetY: e.offsetY };
-        }
+        const getCoords = (e: PointerEvent) => {
+            const rect = canvas.getBoundingClientRect();
+            // Calculate uniform scale factors accounting for device pixel ratio
+            const scaleX = (canvas.width / rect.width) * devicePixelRatio;
+            const scaleY = (canvas.height / rect.height) * devicePixelRatio;
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        };
 
-        const startDrawing = (e: MouseEvent | TouchEvent) => {
+        const startDrawing = (e: PointerEvent) => {
+            e.preventDefault();
             isDrawing = true;
             setFirmaRealizada(true);
-            const { offsetX, offsetY } = getCoords(e);
-            [lastX, lastY] = [offsetX, offsetY];
+            const { x, y } = getCoords(e);
+            [lastX, lastY] = [x, y];
         };
 
-        const draw = (e: MouseEvent | TouchEvent) => {
+        const draw = (e: PointerEvent) => {
             if (!isDrawing) return;
             e.preventDefault();
-            const { offsetX, offsetY } = getCoords(e);
+            const { x, y } = getCoords(e);
             context.beginPath();
             context.moveTo(lastX, lastY);
-            context.lineTo(offsetX, offsetY);
+            context.lineTo(x, y);
             context.stroke();
-            [lastX, lastY] = [offsetX, offsetY];
+            [lastX, lastY] = [x, y];
         };
-        
-        const stopDrawing = () => { isDrawing = false; };
-        
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('mouseleave', stopDrawing);
-        canvas.addEventListener('touchstart', startDrawing, { passive: false });
-        canvas.addEventListener('touchmove', draw, { passive: false });
-        canvas.addEventListener('touchend', stopDrawing);
+
+        const stopDrawing = (e: PointerEvent) => {
+            isDrawing = false;
+        };
+
+        // Use Pointer Events for cross-platform compatibility
+        canvas.addEventListener('pointerdown', startDrawing);
+        canvas.addEventListener('pointermove', draw);
+        canvas.addEventListener('pointerup', stopDrawing);
+        canvas.addEventListener('pointerleave', stopDrawing);
+        canvas.addEventListener('pointercancel', stopDrawing);
 
         return () => {
-            canvas.removeEventListener('mousedown', startDrawing);
-            canvas.removeEventListener('mousemove', draw);
-            canvas.removeEventListener('mouseup', stopDrawing);
-            canvas.removeEventListener('mouseleave', stopDrawing);
-            canvas.removeEventListener('touchstart', startDrawing);
-            canvas.removeEventListener('touchmove', draw);
-            canvas.removeEventListener('touchend', stopDrawing);
+            canvas.removeEventListener('pointerdown', startDrawing);
+            canvas.removeEventListener('pointermove', draw);
+            canvas.removeEventListener('pointerup', stopDrawing);
+            canvas.removeEventListener('pointerleave', stopDrawing);
+            canvas.removeEventListener('pointercancel', stopDrawing);
         };
     }, [cargando, enviadoConExito]);
+
+    // Reinitialize canvas when theme changes
+    useEffect(() => {
+        const observer = new MutationObserver(() => {
+            const canvas = canvasRef.current;
+            if (!canvas || enviadoConExito) return;
+
+            const context = canvas.getContext('2d');
+            if (!context) return;
+
+            // Clear and reinitialize canvas when theme changes
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Reapply canvas settings
+            const devicePixelRatio = window.devicePixelRatio || 1;
+            context.setTransform(1, 0, 0, 1, 0, 0);
+            context.scale(devicePixelRatio, devicePixelRatio);
+            context.lineCap = 'round';
+            context.strokeStyle = '#110e0f';
+            context.lineWidth = 3 * devicePixelRatio;
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+
+        return () => observer.disconnect();
+    }, [enviadoConExito]);
 
     const limpiarFirma = () => {
         const canvas = canvasRef.current;
         const context = canvas?.getContext('2d');
         if (canvas && context) {
+            // Clear the canvas
             context.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Reset transformation matrix to ensure consistent state
+            context.setTransform(1, 0, 0, 1, 0, 0);
+
+            // Reinitialize canvas settings
+            const devicePixelRatio = window.devicePixelRatio || 1;
+            context.scale(devicePixelRatio, devicePixelRatio);
+            context.lineCap = 'round';
+            context.strokeStyle = '#110e0f';
+            context.lineWidth = 3 * devicePixelRatio;
+
             setFirmaRealizada(false);
         }
     };

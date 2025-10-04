@@ -6,7 +6,7 @@
 - **Estado**: ✅ **PRODUCCIÓN ACTIVA**
 - **URL**: https://gajog-app.web.app
 - **Repositorio**: https://github.com/William-Pardo/Gajog
-- **Último Commit**: `ef50570` - feat: Habilitar sección de configuración para usuarios normales
+- **Último Commit**: `b8f2c91` - Fix: Corregir configuración de canvas para modo oscuro
 
 ---
 
@@ -145,6 +145,19 @@ VAPID_KEY=PLACEHOLDER_VAPID_KEY
 
 ## 📋 ÚLTIMAS ACTUALIZACIONES
 
+### 🔄 Commit: `b8f2c91`
+**Fecha**: 2025-10-04
+**Mensaje**: Fix: Corregir configuración de canvas para modo oscuro
+**Cambios**:
+- Mejorar inicialización del canvas en usePaginaFirma hook
+- Agregar limpieza del canvas al inicializar para estado consistente
+- Resetear matriz de transformación para evitar acumulación de escala
+- Agregar observador de mutaciones para detectar cambios de tema
+- Reinicar canvas cuando cambia entre modo claro y oscuro
+- Mejorar función limpiarFirma para resetear completamente el estado del canvas
+- Asegurar que el color de trazo (#110e0f) sea visible en ambos modos
+- Aplicar configuración consistente a todos los canvas de firma (consentimiento, contrato, imagen)
+
 ### 🔄 Commit: `866928b`
 **Fecha**: 2025-10-02
 **Mensaje**: docs: Crear archivo contexto_global.md con documentación completa del proyecto
@@ -211,4 +224,4 @@ VAPID_KEY=PLACEHOLDER_VAPID_KEY
 
 ---
 
-*Este archivo se actualiza automáticamente con cada ejecución del script "guardarles". Última actualización: 2025-10-02 02:32*
+*Este archivo se actualiza automáticamente con cada ejecución del script "guardarles". Última actualización: 2025-10-04 18:30*

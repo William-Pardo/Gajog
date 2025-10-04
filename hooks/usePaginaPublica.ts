@@ -19,7 +19,7 @@ export const usePaginaPublica = <T>(fetcher: Fetcher<T>) => {
         } finally {
             setCargando(false);
         }
-    }, [fetcher]);
+    }, []); // Remove fetcher from dependencies to prevent infinite loops
 
     useEffect(() => {
         cargarDatos();

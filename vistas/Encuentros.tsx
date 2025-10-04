@@ -23,10 +23,10 @@ import EmptyState from '../components/EmptyState';
 // --- VISTA PÚBLICA DEL ENCUENTRO ---
 export const VistaEncuentroPublico: React.FC = () => {
     const { idEvento } = ReactRouterDOM.useParams<{ idEvento: string }>();
-    const fetcher = () => {
+    const fetcher = React.useCallback(() => {
         if (!idEvento) throw new Error("ID de encuentro no proporcionado.");
         return obtenerEventoPorId(idEvento);
-    }
+    }, [idEvento]);
     const { data: evento, cargando, error, cargarDatos: cargarEvento } = usePaginaPublica(fetcher);
     const [modalAbierto, setModalAbierto] = useState(false);
 
