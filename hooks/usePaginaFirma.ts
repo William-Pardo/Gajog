@@ -86,39 +86,62 @@ export const usePaginaFirma = ({ idEstudiante, tipo }: UsePaginaFirmaProps) => {
         const context = canvas.getContext('2d');
         if(!context) return;
 
-        // Clear canvas first to ensure clean state
-        context.clearRect(0, 0, canvas.width, canvas.height);
+        // Function to setup canvas size and scaling
+        const setupCanvas = () => {
+            const rect = canvas.getBoundingClientRect();
+            const devicePixelRatio = window.devicePixelRatio || 1;
 
-        // Handle high-DPI displays with uniform scaling
-        const devicePixelRatio = window.devicePixelRatio || 1;
+            // Set canvas size to match CSS display size
+            canvas.width = rect.width;
+            canvas.height = rect.height;
 
-        // Reset scale to avoid accumulation
-        context.setTransform(1, 0, 0, 1, 0, 0);
+            // Reset transformation matrix
+            context.setTransform(1, 0, 0, 1, 0, 0);
 
-        // Scale context for crisp rendering on high-DPI
-        context.scale(devicePixelRatio, devicePixelRatio);
-        context.lineCap = 'round';
+            // Scale for crisp rendering on high-DPI displays
+            context.scale(devicePixelRatio, devicePixelRatio);
 
-        // Dark stroke color that works well on white canvas background in both light and dark modes
-        context.strokeStyle = '#110e0f';
-        context.lineWidth = 3 * devicePixelRatio;
+            // Set drawing properties with DPI-adjusted line width
+            context.lineCap = 'round';
+            context.strokeStyle = '#110e0f';
+            context.lineWidth = 3 * devicePixelRatio;
+
+            // Fill background with white (scaled)
+            context.fillStyle = '#ffffff';
+            context.fillRect(0, 0, rect.width, rect.height);
+        };
+
+        // Setup canvas initially
+        setupCanvas();
 
         let isDrawing = false;
         let lastX = 0;
         let lastY = 0;
 
-        const getCoords = (e: PointerEvent) => {
+        const getCoords = (e: PointerEvent | TouchEvent) => {
             const rect = canvas.getBoundingClientRect();
-            // Calculate uniform scale factors accounting for device pixel ratio
-            const scaleX = (canvas.width / rect.width) * devicePixelRatio;
-            const scaleY = (canvas.height / rect.height) * devicePixelRatio;
+
+            // Get coordinates from pointer or first touch
+            let clientX: number, clientY: number;
+            if (e instanceof PointerEvent) {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            } else {
+                // Touch event
+                const touch = e.touches[0] || e.changedTouches[0];
+                clientX = touch.clientX;
+                clientY = touch.clientY;
+            }
+
+            // Return coordinates relative to canvas display size
+            // Context scaling handles the DPI adjustment
             return {
-                x: (e.clientX - rect.left) * scaleX,
-                y: (e.clientY - rect.top) * scaleY
+                x: clientX - rect.left,
+                y: clientY - rect.top
             };
         };
 
-        const startDrawing = (e: PointerEvent) => {
+        const startDrawing = (e: PointerEvent | TouchEvent) => {
             e.preventDefault();
             isDrawing = true;
             setFirmaRealizada(true);
@@ -126,7 +149,7 @@ export const usePaginaFirma = ({ idEstudiante, tipo }: UsePaginaFirmaProps) => {
             [lastX, lastY] = [x, y];
         };
 
-        const draw = (e: PointerEvent) => {
+        const draw = (e: PointerEvent | TouchEvent) => {
             if (!isDrawing) return;
             e.preventDefault();
             const { x, y } = getCoords(e);
@@ -137,23 +160,39 @@ export const usePaginaFirma = ({ idEstudiante, tipo }: UsePaginaFirmaProps) => {
             [lastX, lastY] = [x, y];
         };
 
-        const stopDrawing = (e: PointerEvent) => {
+        const stopDrawing = (e: PointerEvent | TouchEvent) => {
             isDrawing = false;
         };
 
-        // Use Pointer Events for cross-platform compatibility
+        // Handle window resize to maintain proper canvas sizing
+        const handleResize = () => {
+            setupCanvas();
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        // Pointer events for desktop and some mobile devices
         canvas.addEventListener('pointerdown', startDrawing);
         canvas.addEventListener('pointermove', draw);
         canvas.addEventListener('pointerup', stopDrawing);
         canvas.addEventListener('pointerleave', stopDrawing);
         canvas.addEventListener('pointercancel', stopDrawing);
 
+        // Touch events for mobile devices (fallback)
+        canvas.addEventListener('touchstart', startDrawing, { passive: false });
+        canvas.addEventListener('touchmove', draw, { passive: false });
+        canvas.addEventListener('touchend', stopDrawing, { passive: false });
+
         return () => {
+            window.removeEventListener('resize', handleResize);
             canvas.removeEventListener('pointerdown', startDrawing);
             canvas.removeEventListener('pointermove', draw);
             canvas.removeEventListener('pointerup', stopDrawing);
             canvas.removeEventListener('pointerleave', stopDrawing);
             canvas.removeEventListener('pointercancel', stopDrawing);
+            canvas.removeEventListener('touchstart', startDrawing);
+            canvas.removeEventListener('touchmove', draw);
+            canvas.removeEventListener('touchend', stopDrawing);
         };
     }, [cargando, enviadoConExito]);
 
@@ -166,16 +205,22 @@ export const usePaginaFirma = ({ idEstudiante, tipo }: UsePaginaFirmaProps) => {
             const context = canvas.getContext('2d');
             if (!context) return;
 
-            // Clear and reinitialize canvas when theme changes
-            context.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Reapply canvas settings
+            // Re-setup canvas size and clear when theme changes
+            const rect = canvas.getBoundingClientRect();
             const devicePixelRatio = window.devicePixelRatio || 1;
+
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+
             context.setTransform(1, 0, 0, 1, 0, 0);
             context.scale(devicePixelRatio, devicePixelRatio);
             context.lineCap = 'round';
             context.strokeStyle = '#110e0f';
             context.lineWidth = 3 * devicePixelRatio;
+
+            // Fill background with white
+            context.fillStyle = '#ffffff';
+            context.fillRect(0, 0, rect.width, rect.height);
         });
 
         observer.observe(document.documentElement, {
@@ -190,18 +235,25 @@ export const usePaginaFirma = ({ idEstudiante, tipo }: UsePaginaFirmaProps) => {
         const canvas = canvasRef.current;
         const context = canvas?.getContext('2d');
         if (canvas && context) {
-            // Clear the canvas
-            context.clearRect(0, 0, canvas.width, canvas.height);
+            // Get current display size
+            const rect = canvas.getBoundingClientRect();
+            const devicePixelRatio = window.devicePixelRatio || 1;
 
-            // Reset transformation matrix to ensure consistent state
+            // Reset canvas size and transformation
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+
             context.setTransform(1, 0, 0, 1, 0, 0);
+            context.scale(devicePixelRatio, devicePixelRatio);
 
             // Reinitialize canvas settings
-            const devicePixelRatio = window.devicePixelRatio || 1;
-            context.scale(devicePixelRatio, devicePixelRatio);
             context.lineCap = 'round';
             context.strokeStyle = '#110e0f';
             context.lineWidth = 3 * devicePixelRatio;
+
+            // Fill background with white
+            context.fillStyle = '#ffffff';
+            context.fillRect(0, 0, rect.width, rect.height);
 
             setFirmaRealizada(false);
         }

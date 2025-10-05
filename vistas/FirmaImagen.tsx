@@ -88,10 +88,9 @@ const VistaFirmaImagen: React.FC = () => {
                     <label className="block text-md font-medium text-gray-700 dark:text-gray-300 mb-2">Firma del Tutor:</label>
                     <canvas
                         ref={canvasRef}
-                        width="500"
-                        height="200"
                         className="w-full border-2 border-dashed rounded-md bg-white cursor-crosshair hover:border-tkd-blue dark:hover:border-blue-400 transition-colors shadow-inner"
                         aria-label="Área de firma digital"
+                        style={{ touchAction: 'none' }}
                     ></canvas>
                     <div className="mt-2 flex justify-end">
                         <button onClick={limpiarFirma} className="text-sm text-tkd-blue hover:underline dark:text-blue-400 dark:hover:text-blue-300 transition-colors">
