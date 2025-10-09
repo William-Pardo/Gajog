@@ -1,5 +1,14 @@
 # 📋 CONTEXTO GLOBAL - PROYECTO TAEKWONDO GA JOG
 
+
+## 2025-10-08 20:29:39
+
+**Resumen:** Execution of context_saver.py script with 'guardarles' trigger to save conversation context about the script's functionalities.
+
+**Detalles:** The script is a Python tool for Kilo Code that automatically saves conversation history to contexto_global.md. When executed with the 'guardarles' trigger, it prompts for a summary and details of the current conversation, then appends a timestamped entry to the context file, preserving important information for future reference.
+
+---
+
 ## 🎯 ESTADO ACTUAL DEL PROYECTO
 
 ### ✅ PROYECTO COMPLETADO AL 100%
